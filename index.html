@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VR Shopping Game - Magasin en Réalité Virtuelle</title>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.0.0/dist/aframe-extras.min.js"></script>
+    <script src="js/vr-store.js"></script>
+    <script src="js/cart-system.js"></script>
+    <script src="js/product-interactions.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="ui-overlay">
+        <div id="cart-panel">
+            <h2>Panier</h2>
+            <div id="cart-items"></div>
+            <div id="cart-total">Total: 0€</div>
+            <button id="checkout-btn" onclick="checkout()">Commander</button>
+        </div>
+        <div id="order-form" style="display:none;">
+            <h2>Informations de livraison</h2>
+            <form id="delivery-form">
+                <input type="text" id="customer-name" placeholder="Nom complet" required>
+                <input type="text" id="customer-address" placeholder="Adresse" required>
+                <input type="text" id="customer-city" placeholder="Ville" required>
+                <input type="text" id="customer-postal" placeholder="Code postal" required>
+                <input type="tel" id="customer-phone" placeholder="Téléphone" required>
+                <button type="submit">Confirmer la commande</button>
+                <button type="button" onclick="closeOrderForm()">Annuler</button>
+            </form>
+        </div>
+        <div id="confirmation" style="display:none;">
+            <h2>Commande confirmée!</h2>
+            <p>Votre commande sera livrée dans le monde réel!</p>
+            <p id="order-details"></p>
+            <button onclick="closeConfirmation()">Continuer le shopping</button>
+        </div>
+    </div>
+
+    <a-scene id="vr-scene" loading-screen="dotsColor: #4CC3D9; backgroundColor: #1a1a1a">
+        <!-- Asset Management -->
+        <a-assets>
+            <img id="floor-texture" src="assets/textures/floor.jpg" crossorigin="anonymous">
+            <img id="wall-texture" src="assets/textures/wall.jpg" crossorigin="anonymous">
+        </a-assets>
+
+        <!-- Store Environment -->
+        <a-entity id="store-environment">
+            <!-- Floor -->
+            <a-plane position="0 0 0" rotation="-90 0 0" width="20" height="20" 
+                     color="#8B7D6B" shadow="receive: true"></a-plane>
+            
+            <!-- Walls -->
+            <a-box position="0 2 -10" width="20" height="4" depth="0.2" color="#E8E0D5"></a-box>
+            <a-box position="-10 2 0" width="0.2" height="4" depth="20" color="#E8E0D5"></a-box>
+            <a-box position="10 2 0" width="0.2" height="4" depth="20" color="#E8E0D5"></a-box>
+            
+            <!-- Ceiling -->
+            <a-plane position="0 4 0" rotation="90 0 0" width="20" height="20" color="#F5F5F5"></a-plane>
+            
+            <!-- Lighting -->
+            <a-light type="ambient" intensity="0.5"></a-light>
+            <a-light type="directional" position="2 4 2" intensity="0.8" castShadow="true"></a-light>
+            <a-light type="point" position="-5 3 -5" intensity="0.5"></a-light>
+            <a-light type="point" position="5 3 5" intensity="0.5"></a-light>
+        </a-entity>
+
+        <!-- Product Displays -->
+        <a-entity id="products">
+            <!-- Electronics Section -->
+            <a-entity position="-7 0 -7">
+                <a-text value="Électronique" position="0 2.5 0" align="center" color="#333" width="6"></a-text>
+                
+                <!-- Laptop -->
+                <a-entity class="product" data-id="laptop" data-name="Ordinateur Portable" data-price="999" position="0 1.2 0">
+                    <a-box color="#2C3E50" depth="0.8" height="0.05" width="1.2"></a-box>
+                    <a-box color="#34495E" depth="0.02" height="0.9" width="1.2" position="0 0.5 -0.4"></a-box>
+                    <a-text value="Laptop\n999€" position="0 -0.3 0" align="center" width="3" color="#000"></a-text>
+                </a-entity>
+                
+                <!-- Smartphone -->
+                <a-entity class="product" data-id="phone" data-name="Smartphone" data-price="699" position="2 1.2 0">
+                    <a-box color="#1A1A1A" depth="0.1" height="1.5" width="0.7"></a-box>
+                    <a-plane color="#4A90E2" depth="0.01" height="1.3" width="0.6" position="0 0 0.051"></a-plane>
+                    <a-text value="Phone\n699€" position="0 -0.5 0" align="center" width="3" color="#000"></a-text>
+                </a-entity>
+            </a-entity>
+
+            <!-- Clothing Section -->
+            <a-entity position="7 0 -7">
+                <a-text value="Vêtements" position="0 2.5 0" align="center" color="#333" width="6"></a-text>
+                
+                <!-- T-Shirt -->
+                <a-entity class="product" data-id="tshirt" data-name="T-Shirt" data-price="29" position="0 1.5 0">
+                    <a-cylinder color="#E74C3C" height="1" radius="0.5"></a-cylinder>
+                    <a-text value="T-Shirt\n29€" position="0 -0.8 0" align="center" width="3" color="#000"></a-text>
+                </a-entity>
+                
+                <!-- Jeans -->
+                <a-entity class="product" data-id="jeans" data-name="Jean" data-price="79" position="2 1.5 0">
+                    <a-cylinder color="#3498DB" height="1.2" radius="0.4"></a-cylinder>
+                    <a-text value="Jeans\n79€" position="0 -0.8 0" align="center" width="3" color="#000"></a-text>
+                </a-entity>
+            </a-entity>
+
+            <!-- Home Decor Section -->
+            <a-entity position="-7 0 7">
+                <a-text value="Décoration" position="0 2.5 0" align="center" color="#333" width="6"></a-text>
+                
+                <!-- Lamp -->
+                <a-entity class="product" data-id="lamp" data-name="Lampe Design" data-price="149" position="0 1 0">
+                    <a-cylinder color="#F39C12" height="1.5" radius="0.15" position="0 0.75 0"></a-cylinder>
+                    <a-cone color="#ECF0F1" height="0.8" radius-bottom="0.5" radius-top="0.2" position="0 1.9 0"></a-cone>
+                    <a-text value="Lampe\n149€" position="0 -0.3 0" align="center" width="3" color="#000"></a-text>
+                </a-entity>
+                
+                <!-- Vase -->
+                <a-entity class="product" data-id="vase" data-name="Vase Céramique" data-price="59" position="2 1 0">
+                    <a-cylinder color="#16A085" height="1" radius-bottom="0.3" radius-top="0.4"></a-cylinder>
+                    <a-text value="Vase\n59€" position="0 -0.3 0" align="center" width="3" color="#000"></a-text>
+                </a-entity>
+            </a-entity>
+
+            <!-- Food Section -->
+            <a-entity position="7 0 7">
+                <a-text value="Alimentation" position="0 2.5 0" align="center" color="#333" width="6"></a-text>
+                
+                <!-- Coffee -->
+                <a-entity class="product" data-id="coffee" data-name="Café Premium" data-price="12" position="0 1 0">
+                    <a-cylinder color="#6F4E37" height="1" radius="0.3"></a-cylinder>
+                    <a-text value="Café\n12€" position="0 -0.3 0" align="center" width="3" color="#000"></a-text>
+                </a-entity>
+                
+                <!-- Chocolate -->
+                <a-entity class="product" data-id="chocolate" data-name="Chocolat Artisanal" data-price="8" position="2 1 0">
+                    <a-box color="#3E2723" depth="0.5" height="0.3" width="1"></a-box>
+                    <a-text value="Chocolat\n8€" position="0 -0.3 0" align="center" width="3" color="#000"></a-text>
+                </a-entity>
+            </a-entity>
+        </a-entity>
+
+        <!-- Info Sign -->
+        <a-entity position="0 2 -9">
+            <a-text value="Bienvenue dans votre magasin VR!\nRegardez les produits et cliquez pour acheter" 
+                    align="center" width="8" color="#2C3E50"></a-text>
+        </a-entity>
+
+        <!-- Camera/Player -->
+        <a-entity id="rig" position="0 1.6 5">
+            <a-camera id="camera" look-controls wasd-controls>
+                <a-cursor color="#4CC3D9" raycaster="objects: .product"></a-cursor>
+            </a-camera>
+        </a-entity>
+
+        <!-- Sky -->
+        <a-sky color="#87CEEB"></a-sky>
+    </a-scene>
+
+    <script>
+        // Initialize the VR store when the scene is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initVRStore();
+        });
+    </script>
+</body>
+</html>

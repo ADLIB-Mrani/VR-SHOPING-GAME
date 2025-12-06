@@ -1,0 +1,29 @@
+{
+  "name": "vr-shopping-game",
+  "version": "1.0.0",
+  "description": "Un jeu d'un store avec réalité virtuelle où tu fais le shopping et la livraison se fait dans le monde réel",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8080 -o",
+    "dev": "npx http-server -p 8080 -o"
+  },
+  "keywords": [
+    "vr",
+    "virtual-reality",
+    "shopping",
+    "e-commerce",
+    "aframe",
+    "webvr",
+    "game"
+  ],
+  "author": "ADLIB-Mrani",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ADLIB-Mrani/VR-SHOPING-GAME.git"
+  }
+}
