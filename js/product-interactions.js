@@ -41,6 +41,24 @@ const PRODUCT_CATALOG = {
         weight: 0.6,
         dimensions: 'Taille 32'
     },
+    shoes: {
+        id: 'shoes',
+        name: 'Chaussures de Sport',
+        price: 120,
+        category: 'clothing',
+        description: 'Chaussures de sport premium',
+        weight: 0.8,
+        dimensions: 'Pointure 42'
+    },
+    jacket: {
+        id: 'jacket',
+        name: 'Veste en Cuir',
+        price: 199,
+        category: 'clothing',
+        description: 'Veste en cuir véritable',
+        weight: 1.2,
+        dimensions: 'Taille L'
+    },
     lamp: {
         id: 'lamp',
         name: 'Lampe Design',
@@ -59,6 +77,24 @@ const PRODUCT_CATALOG = {
         weight: 1.2,
         dimensions: '25x15x15 cm'
     },
+    frame: {
+        id: 'frame',
+        name: 'Cadre Photo',
+        price: 35,
+        category: 'home',
+        description: 'Cadre photo décoratif',
+        weight: 0.5,
+        dimensions: '30x40 cm'
+    },
+    clock: {
+        id: 'clock',
+        name: 'Horloge Murale',
+        price: 89,
+        category: 'home',
+        description: 'Horloge murale design',
+        weight: 1.0,
+        dimensions: '35x35 cm'
+    },
     coffee: {
         id: 'coffee',
         name: 'Café Premium',
@@ -76,6 +112,78 @@ const PRODUCT_CATALOG = {
         description: 'Chocolat noir artisanal 200g',
         weight: 0.2,
         dimensions: '15x10x2 cm'
+    },
+    wine: {
+        id: 'wine',
+        name: 'Vin Rouge',
+        price: 45,
+        category: 'food',
+        description: 'Vin rouge de qualité',
+        weight: 1.5,
+        dimensions: 'Bouteille 75cl'
+    },
+    cheese: {
+        id: 'cheese',
+        name: 'Fromage Artisanal',
+        price: 18,
+        category: 'food',
+        description: 'Fromage artisanal français',
+        weight: 0.3,
+        dimensions: '200g'
+    },
+    book1: {
+        id: 'book1',
+        name: 'Roman Bestseller',
+        price: 22,
+        category: 'books',
+        description: 'Roman bestseller du moment',
+        weight: 0.4,
+        dimensions: '14x21 cm'
+    },
+    book2: {
+        id: 'book2',
+        name: 'Guide Cuisine',
+        price: 28,
+        category: 'books',
+        description: 'Guide complet de cuisine',
+        weight: 0.6,
+        dimensions: '20x25 cm'
+    },
+    book3: {
+        id: 'book3',
+        name: 'Encyclopédie',
+        price: 35,
+        category: 'books',
+        description: 'Encyclopédie illustrée',
+        weight: 1.0,
+        dimensions: '25x30 cm'
+    },
+    basketball: {
+        id: 'basketball',
+        name: 'Ballon de Basket',
+        price: 35,
+        category: 'sports',
+        description: 'Ballon de basketball officiel',
+        weight: 0.6,
+        dimensions: 'Taille 7'
+    },
+    yogamat: {
+        id: 'yogamat',
+        name: 'Tapis de Yoga',
+        price: 45,
+        category: 'sports',
+        description: 'Tapis de yoga antidérapant',
+        weight: 1.0,
+        dimensions: '180x60 cm'
+    },
+    dumbbells: {
+        id: 'dumbbells',
+        name: 'Haltères 5kg',
+        price: 55,
+        category: 'sports',
+        description: 'Paire d\'haltères 5kg',
+        weight: 10.0,
+        dimensions: '2x 5kg'
     }
 };
 
