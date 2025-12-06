@@ -9,6 +9,12 @@ let currentProximityProduct = null;
 let isDragging = false;
 let draggedProduct = null;
 
+// Constants
+const PROXIMITY_CHECK_INTERVAL = 100; // ms - How often to check player proximity
+const PROXIMITY_DISTANCE = 2.5; // units - Distance at which purchase UI appears
+const CART_DROP_DISTANCE = 3; // units - Distance for successful drag-drop
+const SCENE_LOAD_DELAY = 1000; // ms - Delay before initializing after scene load
+
 /**
  * Initialize proximity purchase system
  */
@@ -21,8 +27,16 @@ function initProximityPurchaseSystem() {
         setupProductProximityUI(product);
     });
     
-    // Set up camera tracking for proximity detection
-    setInterval(checkPlayerProximity, 100);
+    // Set up camera tracking for proximity detection using requestAnimationFrame for better performance
+    let lastCheck = 0;
+    function checkProximityLoop(timestamp) {
+        if (timestamp - lastCheck >= PROXIMITY_CHECK_INTERVAL) {
+            checkPlayerProximity();
+            lastCheck = timestamp;
+        }
+        requestAnimationFrame(checkProximityLoop);
+    }
+    requestAnimationFrame(checkProximityLoop);
     
     // Set up drag-to-cart functionality
     setupDragToCart();
@@ -168,8 +182,8 @@ function checkPlayerProximity() {
         const productPos = product.object3D.getWorldPosition(new THREE.Vector3());
         const distance = cameraPos.distanceTo(productPos);
         
-        // Check if within proximity range (2.5 units)
-        if (distance < 2.5 && distance < closestDistance) {
+        // Check if within proximity range
+        if (distance < PROXIMITY_DISTANCE && distance < closestDistance) {
             closestProduct = product;
             closestDistance = distance;
         }
@@ -221,7 +235,8 @@ function handlePurchaseClick(productId) {
         loop: 2
     });
     
-    // Reset quantity
+    // Reset quantity to 1 for next purchase
+    // Note: This provides a clean slate for each purchase. User can adjust before next purchase.
     ui.quantity = 1;
     updateQuantityDisplay(productId);
 }
@@ -315,7 +330,7 @@ function checkDropOnCart() {
     const distance = cameraPos.distanceTo(cartPos);
     
     // If close to cart, add product
-    if (distance < 3) {
+    if (distance < CART_DROP_DISTANCE) {
         const productId = draggedProduct.getAttribute('data-id');
         const productName = draggedProduct.getAttribute('data-name');
         const productPrice = parseFloat(draggedProduct.getAttribute('data-price'));
@@ -390,16 +405,18 @@ if (typeof window !== 'undefined') {
         const scene = document.querySelector('a-scene');
         if (scene) {
             if (scene.hasLoaded) {
+                // Delay initialization to ensure all entities are properly loaded
                 setTimeout(() => {
                     initProximityPurchaseSystem();
                     setupPurchaseUIHandlers();
-                }, 1000);
+                }, SCENE_LOAD_DELAY);
             } else {
                 scene.addEventListener('loaded', function() {
+                    // Delay initialization to ensure all entities are properly loaded
                     setTimeout(() => {
                         initProximityPurchaseSystem();
                         setupPurchaseUIHandlers();
-                    }, 1000);
+                    }, SCENE_LOAD_DELAY);
                 });
             }
         }

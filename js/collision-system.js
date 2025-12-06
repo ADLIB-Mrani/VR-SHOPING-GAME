@@ -4,15 +4,7 @@
  */
 
 // Wait for A-Frame to load before registering components
-if (typeof AFRAME === 'undefined') {
-    console.log('Waiting for A-Frame to load...');
-    window.addEventListener('load', initCollisionSystem);
-} else {
-    initCollisionSystem();
-}
-
 function initCollisionSystem() {
-    // Check again if AFRAME is available
     if (typeof AFRAME === 'undefined') {
         console.warn('A-Frame not loaded, collision system cannot initialize');
         return;
@@ -74,4 +66,11 @@ function initCollisionSystem() {
     });
 
     console.log('Collision system loaded');
+}
+
+// Initialize when A-Frame is ready
+if (typeof AFRAME !== 'undefined') {
+    initCollisionSystem();
+} else {
+    window.addEventListener('load', initCollisionSystem);
 }
