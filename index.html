@@ -12,9 +12,54 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loader">
+            <div class="spinner"></div>
+            <p>Chargement du magasin VR...</p>
+            <small>Cela peut prendre quelques secondes</small>
+        </div>
+    </div>
+
+    <!-- Help Button -->
+    <button id="help-btn" class="floating-btn" title="Aide">
+        <span>?</span>
+    </button>
+
+    <!-- Help Panel -->
+    <div id="help-panel" style="display:none;">
+        <h2>🎮 Aide - Contrôles</h2>
+        <div class="help-section">
+            <h3>🖱️ Souris & Clavier</h3>
+            <ul>
+                <li><strong>WASD</strong> ou <strong>Flèches</strong> - Se déplacer</li>
+                <li><strong>Souris</strong> - Regarder autour</li>
+                <li><strong>Clic</strong> - Sélectionner un produit</li>
+            </ul>
+        </div>
+        <div class="help-section">
+            <h3>🎮 VR</h3>
+            <ul>
+                <li><strong>Joystick</strong> - Se déplacer</li>
+                <li><strong>Tête</strong> - Regarder</li>
+                <li><strong>Gâchette</strong> - Sélectionner</li>
+            </ul>
+        </div>
+        <div class="help-section">
+            <h3>🛒 Shopping</h3>
+            <ul>
+                <li>Approchez-vous des produits</li>
+                <li>Cliquez pour ajouter au panier</li>
+                <li>Gérez votre panier à droite</li>
+                <li>Cliquez "Commander" pour passer commande</li>
+            </ul>
+        </div>
+        <button onclick="closeHelp()" class="close-help-btn">Fermer</button>
+    </div>
+
     <div id="ui-overlay">
         <div id="cart-panel">
-            <h2>Panier</h2>
+            <h2>🛒 Panier</h2>
             <div id="cart-items"></div>
             <div id="cart-total">Total: 0€</div>
             <button id="checkout-btn" onclick="checkout()">Commander</button>
@@ -142,10 +187,29 @@
             </a-entity>
         </a-entity>
 
-        <!-- Info Sign -->
-        <a-entity position="0 2 -9">
-            <a-text value="Bienvenue dans votre magasin VR!\nRegardez les produits et cliquez pour acheter" 
+        <!-- Info Signs -->
+        <a-entity position="0 2.5 -9">
+            <a-text value="🎮 Bienvenue dans votre magasin VR!" 
+                    align="center" width="10" color="#667eea"></a-text>
+        </a-entity>
+        
+        <a-entity position="0 1.8 -9">
+            <a-text value="WASD = Se déplacer | Souris = Regarder | Clic = Acheter" 
                     align="center" width="8" color="#2C3E50"></a-text>
+        </a-entity>
+        
+        <a-entity position="0 1.3 -9">
+            <a-text value="💰 Livraison GRATUITE à partir de 100€!" 
+                    align="center" width="7" color="#27AE60"></a-text>
+        </a-entity>
+        
+        <!-- Directional arrows -->
+        <a-entity position="-9 1.5 0" rotation="0 90 0">
+            <a-text value="← Électronique" align="center" width="5" color="#3498DB"></a-text>
+        </a-entity>
+        
+        <a-entity position="9 1.5 0" rotation="0 -90 0">
+            <a-text value="Vêtements →" align="center" width="5" color="#E74C3C"></a-text>
         </a-entity>
 
         <!-- Camera/Player -->

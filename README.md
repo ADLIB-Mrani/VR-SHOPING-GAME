@@ -24,12 +24,24 @@ Un jeu de shopping en réalité virtuelle où vous faites vos achats dans un env
 
 ## 🚀 Installation
 
-### Prérequis
-- Navigateur web moderne (Chrome, Firefox, Edge)
-- Connexion Internet
-- Optionnel: Casque VR compatible WebXR
+### ⚡ Installation Ultra-Rapide (0 dépendance!)
 
-### Installation Simple
+**La méthode la plus simple - Aucune installation requise!**
+
+1. **Téléchargez** le projet (bouton vert "Code" → "Download ZIP")
+2. **Décompressez** le fichier ZIP
+3. **Double-cliquez** sur `index.html`
+4. **C'est tout!** Le jeu se lance dans votre navigateur! 🎮
+
+### 🔧 Installation avec Serveur Local (Recommandé pour développement)
+
+#### Prérequis
+- Navigateur web moderne (Chrome recommandé, Firefox, Edge, Safari)
+- Connexion Internet (pour charger A-Frame)
+- **Optionnel**: Node.js, Python, ou PHP pour serveur local
+- **Optionnel**: Casque VR compatible WebXR
+
+#### Étapes d'Installation
 
 1. **Cloner le repository**
 ```bash
@@ -37,29 +49,55 @@ git clone https://github.com/ADLIB-Mrani/VR-SHOPING-GAME.git
 cd VR-SHOPING-GAME
 ```
 
-2. **Installer les dépendances** (optionnel, pour serveur local)
+2. **Lancement Automatique** (Linux/Mac)
+```bash
+./start.sh
+```
+
+**Lancement Automatique** (Windows)
+```batch
+start.bat
+```
+
+**OU Installation manuelle:**
+
+3. **Installer les dépendances** (optionnel)
 ```bash
 npm install
 ```
 
-3. **Lancer l'application**
+4. **Lancer l'application** - Choisissez une méthode:
 
-Option A - Avec npm:
+**Option A - Avec npm** (Recommandé):
 ```bash
 npm start
 ```
+→ Ouvre automatiquement dans le navigateur!
 
-Option B - Avec Python:
+**Option B - Avec Python 3**:
 ```bash
 python -m http.server 8080
 ```
+→ Puis ouvrez `http://localhost:8080`
 
-Option C - Ouvrir directement `index.html` dans votre navigateur
+**Option C - Avec Python 2**:
+```bash
+python -m SimpleHTTPServer 8080
+```
+→ Puis ouvrez `http://localhost:8080`
 
-4. **Accéder à l'application**
+**Option D - Avec PHP**:
+```bash
+php -S localhost:8080
 ```
-http://localhost:8080
-```
+→ Puis ouvrez `http://localhost:8080`
+
+**Option E - Sans serveur**:
+Double-cliquez sur `index.html` (peut avoir des limitations CORS)
+
+### 📖 Guide Détaillé
+
+Pour un guide d'installation détaillé avec dépannage, voir **[INSTALLATION.md](INSTALLATION.md)**
 
 ## 🎯 Utilisation
 

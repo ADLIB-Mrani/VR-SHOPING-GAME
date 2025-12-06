@@ -20,8 +20,12 @@ function initVRStore() {
     const scene = document.querySelector('a-scene');
     if (scene.hasLoaded) {
         setupProductInteractions();
+        hideLoadingScreen();
     } else {
-        scene.addEventListener('loaded', setupProductInteractions);
+        scene.addEventListener('loaded', () => {
+            setupProductInteractions();
+            hideLoadingScreen();
+        });
     }
     
     // Set up delivery form handler
@@ -30,8 +34,58 @@ function initVRStore() {
         form.addEventListener('submit', handleDeliverySubmit);
     }
     
+    // Set up help button
+    const helpBtn = document.getElementById('help-btn');
+    if (helpBtn) {
+        helpBtn.addEventListener('click', toggleHelp);
+    }
+    
     // Update cart display
     updateCartDisplay();
+    
+    // Show welcome notification
+    setTimeout(() => {
+        showNotification('Bienvenue! Explorez le magasin et ajoutez des produits à votre panier 🛒');
+    }, 1000);
+}
+
+/**
+ * Hide loading screen
+ */
+function hideLoadingScreen() {
+    const loadingScreen = document.getElementById('loading-screen');
+    if (loadingScreen) {
+        setTimeout(() => {
+            loadingScreen.classList.add('hidden');
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+            }, 500);
+        }, 500);
+    }
+}
+
+/**
+ * Toggle help panel
+ */
+function toggleHelp() {
+    const helpPanel = document.getElementById('help-panel');
+    if (helpPanel) {
+        if (helpPanel.style.display === 'none' || !helpPanel.style.display) {
+            helpPanel.style.display = 'block';
+        } else {
+            helpPanel.style.display = 'none';
+        }
+    }
+}
+
+/**
+ * Close help panel
+ */
+function closeHelp() {
+    const helpPanel = document.getElementById('help-panel');
+    if (helpPanel) {
+        helpPanel.style.display = 'none';
+    }
 }
 
 /**

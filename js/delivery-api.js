@@ -11,24 +11,37 @@ class DeliveryAPI {
     }
 
     /**
-     * Create a delivery order
+     * Create a delivery order with retry logic
      */
     async createOrder(orderData) {
-        try {
-            const payload = this.formatOrderPayload(orderData);
-            
-            // In production, this would make a real API call
-            // const response = await this.makeRequest('/api/orders', 'POST', payload);
-            
-            // For demo purposes, simulate API response
-            const response = await this.simulateAPICall(payload);
-            
-            console.log('Order created:', response);
-            return response;
-        } catch (error) {
-            console.error('Failed to create order:', error);
-            throw error;
+        const maxRetries = 3;
+        let lastError;
+        
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                const payload = this.formatOrderPayload(orderData);
+                
+                // In production, this would make a real API call
+                // const response = await this.makeRequest('/api/orders', 'POST', payload);
+                
+                // For demo purposes, simulate API response
+                const response = await this.simulateAPICall(payload);
+                
+                console.log('Order created successfully:', response);
+                return response;
+            } catch (error) {
+                lastError = error;
+                console.warn(`Order creation attempt ${attempt} failed:`, error);
+                
+                if (attempt < maxRetries) {
+                    // Wait before retrying (exponential backoff)
+                    await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+                }
+            }
         }
+        
+        console.error('Failed to create order after all retries:', lastError);
+        throw new Error('Impossible de créer la commande. Veuillez réessayer plus tard.');
     }
 
     /**
