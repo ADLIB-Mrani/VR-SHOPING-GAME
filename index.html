@@ -20,6 +20,10 @@
             <div class="spinner"></div>
             <p>Chargement du magasin VR...</p>
             <small>Cela peut prendre quelques secondes</small>
+            <div id="loading-error" style="display:none; margin-top:20px; color:#ff6b6b;">
+                <p>⚠️ Erreur de chargement</p>
+                <small>Vérifiez votre connexion Internet et rechargez la page</small>
+            </div>
         </div>
     </div>
 
@@ -381,6 +385,17 @@
     </a-scene>
 
     <script>
+        // Check if A-Frame loaded successfully
+        setTimeout(function() {
+            if (typeof AFRAME === 'undefined') {
+                const loadingError = document.getElementById('loading-error');
+                if (loadingError) {
+                    loadingError.style.display = 'block';
+                }
+                console.error('A-Frame failed to load. Please check your internet connection.');
+            }
+        }, 5000);
+        
         // Initialize the VR store when the scene is loaded
         document.addEventListener('DOMContentLoaded', function() {
             initVRStore();
