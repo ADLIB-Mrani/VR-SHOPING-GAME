@@ -341,8 +341,9 @@ class DeliveryAPI {
             errors.push('Ville invalide');
         }
 
-        if (!address.postalCode || !/^\d{5}$/.test(address.postalCode)) {
-            errors.push('Code postal invalide (5 chiffres requis)');
+        // Validate postal code (French format by default, can be extended)
+        if (!address.postalCode || (address.country === 'France' && !/^\d{5}$/.test(address.postalCode))) {
+            errors.push('Code postal invalide (format requis selon le pays)');
         }
 
         if (!address.phone || !/^(\+33|0)[1-9]\d{8}$/.test(address.phone.replace(/\s/g, ''))) {

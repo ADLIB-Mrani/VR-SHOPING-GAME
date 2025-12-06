@@ -361,8 +361,10 @@ function generateOrderNumber() {
  * Get estimated delivery date
  */
 function getEstimatedDelivery() {
+    // Use delivery API calculation for consistency
+    const days = 3; // Default, could be enhanced with postal code analysis
     const date = new Date();
-    date.setDate(date.getDate() + 3); // 3 days from now
+    date.setDate(date.getDate() + days);
     return date.toLocaleDateString('fr-FR', { 
         weekday: 'long', 
         year: 'numeric', 
