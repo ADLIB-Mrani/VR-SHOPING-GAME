@@ -6,8 +6,7 @@
     <title>VR Shopping Game - Magasin en Réalité Virtuelle</title>
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.0.0/dist/aframe-extras.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/c-frame/physx@v0.1.0/dist/physx.release.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-physics-system@v4.0.1/dist/aframe-physics-system.min.js"></script>
+    <script src="js/collision-system.js"></script>
     <script src="js/vr-store.js"></script>
     <script src="js/cart-system.js"></script>
     <script src="js/product-interactions.js"></script>
@@ -87,7 +86,7 @@
         </div>
     </div>
 
-    <a-scene id="vr-scene" loading-screen="dotsColor: #4CC3D9; backgroundColor: #1a1a1a" physics="gravity: 0 -9.8 0; debug: false">
+    <a-scene id="vr-scene" loading-screen="dotsColor: #4CC3D9; backgroundColor: #1a1a1a">
         <!-- Asset Management -->
         <a-assets>
             <!-- Textures can be added here for enhanced visuals -->
@@ -99,17 +98,17 @@
         <a-entity id="store-environment">
             <!-- Floor -->
             <a-plane position="0 0 0" rotation="-90 0 0" width="20" height="20" 
-                     color="#8B7D6B" shadow="receive: true" static-body 
-                     material="src: url(https://cdn.aframe.io/examples/ui/wood.jpg); repeat: 10 10; roughness: 0.8"></a-plane>
+                     color="#8B7D6B" shadow="receive: true" wall-collision
+                     material="color: #8B7D6B; repeat: 10 10; roughness: 0.8"></a-plane>
             
             <!-- Walls -->
-            <a-box position="0 2 -10" width="20" height="4" depth="0.2" color="#E8E0D5" static-body
+            <a-box position="0 2 -10" width="20" height="4" depth="0.2" color="#E8E0D5" wall-collision solid
                    material="color: #E8E0D5; roughness: 0.5"></a-box>
-            <a-box position="-10 2 0" width="0.2" height="4" depth="20" color="#E8E0D5" static-body
+            <a-box position="-10 2 0" width="0.2" height="4" depth="20" color="#E8E0D5" wall-collision solid
                    material="color: #E8E0D5; roughness: 0.5"></a-box>
-            <a-box position="10 2 0" width="0.2" height="4" depth="20" color="#E8E0D5" static-body
+            <a-box position="10 2 0" width="0.2" height="4" depth="20" color="#E8E0D5" wall-collision solid
                    material="color: #E8E0D5; roughness: 0.5"></a-box>
-            <a-box position="0 2 10" width="20" height="4" depth="0.2" color="#E8E0D5" static-body
+            <a-box position="0 2 10" width="20" height="4" depth="0.2" color="#E8E0D5" wall-collision solid
                    material="color: #E8E0D5; roughness: 0.5"></a-box>
             
             <!-- Ceiling -->
@@ -130,11 +129,11 @@
                 <a-text value="Électronique" position="0 2.5 0" align="center" color="#333" width="6"></a-text>
                 
                 <!-- Display Table -->
-                <a-box position="0 0.8 0" width="4" height="0.1" depth="2" color="#8B7355" static-body
+                <a-box position="0 0.8 0" width="4" height="0.1" depth="2" color="#8B7355" product-collision solid
                        material="color: #8B7355; metalness: 0.3; roughness: 0.7"></a-box>
                 
                 <!-- Laptop -->
-                <a-entity class="product" data-id="laptop" data-name="Ordinateur Portable" data-price="999" position="-1 1.2 0" static-body>
+                <a-entity class="product" data-id="laptop" data-name="Ordinateur Portable" data-price="999" position="-1 1.2 0" product-collision solid>
                     <a-box color="#2C3E50" depth="0.8" height="0.05" width="1.2" 
                            material="color: #2C3E50; metalness: 0.8; roughness: 0.2"></a-box>
                     <a-box color="#34495E" depth="0.02" height="0.9" width="1.2" position="0 0.5 -0.4"
@@ -143,7 +142,7 @@
                 </a-entity>
                 
                 <!-- Smartphone -->
-                <a-entity class="product" data-id="phone" data-name="Smartphone" data-price="699" position="1 1.2 0" static-body>
+                <a-entity class="product" data-id="phone" data-name="Smartphone" data-price="699" position="1 1.2 0" product-collision solid>
                     <a-box color="#1A1A1A" depth="0.1" height="1.5" width="0.7"
                            material="color: #1A1A1A; metalness: 0.7; roughness: 0.2"></a-box>
                     <a-plane color="#4A90E2" depth="0.01" height="1.3" width="0.6" position="0 0 0.051"
@@ -157,25 +156,25 @@
                 <a-text value="Vêtements" position="0 2.5 0" align="center" color="#333" width="6"></a-text>
                 
                 <!-- Display Table -->
-                <a-box position="0 0.8 0" width="4" height="0.1" depth="2" color="#8B7355" static-body
+                <a-box position="0 0.8 0" width="4" height="0.1" depth="2" color="#8B7355" product-collision solid
                        material="color: #8B7355; metalness: 0.3; roughness: 0.7"></a-box>
                 
                 <!-- T-Shirt -->
-                <a-entity class="product" data-id="tshirt" data-name="T-Shirt" data-price="29" position="-1 1.5 0" static-body>
+                <a-entity class="product" data-id="tshirt" data-name="T-Shirt" data-price="29" position="-1 1.5 0" product-collision solid>
                     <a-cylinder color="#E74C3C" height="1" radius="0.5"
                                 material="color: #E74C3C; roughness: 0.8"></a-cylinder>
                     <a-text value="T-Shirt\n29€" position="0 -0.8 0" align="center" width="3" color="#000"></a-text>
                 </a-entity>
                 
                 <!-- Jeans -->
-                <a-entity class="product" data-id="jeans" data-name="Jean" data-price="79" position="1 1.5 0" static-body>
+                <a-entity class="product" data-id="jeans" data-name="Jean" data-price="79" position="1 1.5 0" product-collision solid>
                     <a-cylinder color="#3498DB" height="1.2" radius="0.4"
                                 material="color: #3498DB; roughness: 0.9"></a-cylinder>
                     <a-text value="Jeans\n79€" position="0 -0.8 0" align="center" width="3" color="#000"></a-text>
                 </a-entity>
                 
                 <!-- Shoes -->
-                <a-entity class="product" data-id="shoes" data-name="Chaussures de Sport" data-price="120" position="-1 1.2 -1.5" static-body>
+                <a-entity class="product" data-id="shoes" data-name="Chaussures de Sport" data-price="120" position="-1 1.2 -1.5" product-collision solid>
                     <a-box color="#2C3E50" depth="0.8" height="0.3" width="0.4"
                            material="color: #2C3E50; metalness: 0.2; roughness: 0.7"></a-box>
                     <a-box color="#E74C3C" depth="0.8" height="0.2" width="0.4" position="0 0.25 0"
@@ -184,7 +183,7 @@
                 </a-entity>
                 
                 <!-- Jacket -->
-                <a-entity class="product" data-id="jacket" data-name="Veste en Cuir" data-price="199" position="1 1.5 -1.5" static-body>
+                <a-entity class="product" data-id="jacket" data-name="Veste en Cuir" data-price="199" position="1 1.5 -1.5" product-collision solid>
                     <a-cylinder color="#1A1A1A" height="1.3" radius="0.5"
                                 material="color: #1A1A1A; metalness: 0.4; roughness: 0.3"></a-cylinder>
                     <a-text value="Jacket\n199€" position="0 -0.8 0" align="center" width="3" color="#000"></a-text>
@@ -196,11 +195,11 @@
                 <a-text value="Décoration" position="0 2.5 0" align="center" color="#333" width="6"></a-text>
                 
                 <!-- Display Table -->
-                <a-box position="0 0.8 0" width="4" height="0.1" depth="2" color="#8B7355" static-body
+                <a-box position="0 0.8 0" width="4" height="0.1" depth="2" color="#8B7355" product-collision solid
                        material="color: #8B7355; metalness: 0.3; roughness: 0.7"></a-box>
                 
                 <!-- Lamp -->
-                <a-entity class="product" data-id="lamp" data-name="Lampe Design" data-price="149" position="-1 1 0" static-body>
+                <a-entity class="product" data-id="lamp" data-name="Lampe Design" data-price="149" position="-1 1 0" product-collision solid>
                     <a-cylinder color="#F39C12" height="1.5" radius="0.15" position="0 0.75 0"
                                 material="color: #F39C12; metalness: 0.6; roughness: 0.3"></a-cylinder>
                     <a-cone color="#ECF0F1" height="0.8" radius-bottom="0.5" radius-top="0.2" position="0 1.9 0"
@@ -209,14 +208,14 @@
                 </a-entity>
                 
                 <!-- Vase -->
-                <a-entity class="product" data-id="vase" data-name="Vase Céramique" data-price="59" position="1 1 0" static-body>
+                <a-entity class="product" data-id="vase" data-name="Vase Céramique" data-price="59" position="1 1 0" product-collision solid>
                     <a-cylinder color="#16A085" height="1" radius-bottom="0.3" radius-top="0.4"
                                 material="color: #16A085; roughness: 0.4; metalness: 0.2"></a-cylinder>
                     <a-text value="Vase\n59€" position="0 -0.3 0" align="center" width="3" color="#000"></a-text>
                 </a-entity>
                 
                 <!-- Picture Frame -->
-                <a-entity class="product" data-id="frame" data-name="Cadre Photo" data-price="35" position="-1 1.5 -1.5" static-body>
+                <a-entity class="product" data-id="frame" data-name="Cadre Photo" data-price="35" position="-1 1.5 -1.5" product-collision solid>
                     <a-box color="#654321" depth="0.1" height="1" width="0.8"
                            material="color: #654321; roughness: 0.8"></a-box>
                     <a-plane color="#FFF" depth="0.05" height="0.8" width="0.6" position="0 0 0.055"
@@ -225,7 +224,7 @@
                 </a-entity>
                 
                 <!-- Clock -->
-                <a-entity class="product" data-id="clock" data-name="Horloge Murale" data-price="89" position="1 1.5 -1.5" static-body>
+                <a-entity class="product" data-id="clock" data-name="Horloge Murale" data-price="89" position="1 1.5 -1.5" product-collision solid>
                     <a-cylinder color="#2C3E50" height="0.2" radius="0.5"
                                 material="color: #2C3E50; metalness: 0.7; roughness: 0.2"></a-cylinder>
                     <a-plane color="#ECF0F1" height="0.9" width="0.9" position="0 0 0.11" rotation="0 0 0"
@@ -239,25 +238,25 @@
                 <a-text value="Alimentation" position="0 2.5 0" align="center" color="#333" width="6"></a-text>
                 
                 <!-- Display Table -->
-                <a-box position="0 0.8 0" width="4" height="0.1" depth="2" color="#8B7355" static-body
+                <a-box position="0 0.8 0" width="4" height="0.1" depth="2" color="#8B7355" product-collision solid
                        material="color: #8B7355; metalness: 0.3; roughness: 0.7"></a-box>
                 
                 <!-- Coffee -->
-                <a-entity class="product" data-id="coffee" data-name="Café Premium" data-price="12" position="-1 1 0" static-body>
+                <a-entity class="product" data-id="coffee" data-name="Café Premium" data-price="12" position="-1 1 0" product-collision solid>
                     <a-cylinder color="#6F4E37" height="1" radius="0.3"
                                 material="color: #6F4E37; roughness: 0.9"></a-cylinder>
                     <a-text value="Café\n12€" position="0 -0.3 0" align="center" width="3" color="#000"></a-text>
                 </a-entity>
                 
                 <!-- Chocolate -->
-                <a-entity class="product" data-id="chocolate" data-name="Chocolat Artisanal" data-price="8" position="1 1 0" static-body>
+                <a-entity class="product" data-id="chocolate" data-name="Chocolat Artisanal" data-price="8" position="1 1 0" product-collision solid>
                     <a-box color="#3E2723" depth="0.5" height="0.3" width="1"
                            material="color: #3E2723; roughness: 0.6"></a-box>
                     <a-text value="Chocolat\n8€" position="0 -0.3 0" align="center" width="3" color="#000"></a-text>
                 </a-entity>
                 
                 <!-- Wine Bottle -->
-                <a-entity class="product" data-id="wine" data-name="Vin Rouge" data-price="45" position="-1 1.3 -1.5" static-body>
+                <a-entity class="product" data-id="wine" data-name="Vin Rouge" data-price="45" position="-1 1.3 -1.5" product-collision solid>
                     <a-cylinder color="#722F37" height="1.5" radius="0.15"
                                 material="color: #722F37; metalness: 0.3; roughness: 0.2"></a-cylinder>
                     <a-cone color="#1A1A1A" height="0.3" radius-bottom="0.15" radius-top="0.05" position="0 0.9 0"
@@ -266,7 +265,7 @@
                 </a-entity>
                 
                 <!-- Cheese -->
-                <a-entity class="product" data-id="cheese" data-name="Fromage Artisanal" data-price="18" position="1 1 -1.5" static-body>
+                <a-entity class="product" data-id="cheese" data-name="Fromage Artisanal" data-price="18" position="1 1 -1.5" product-collision solid>
                     <a-box color="#FFF8DC" depth="0.6" height="0.3" width="0.6"
                            material="color: #FFF8DC; roughness: 0.9"></a-box>
                     <a-text value="Fromage\n18€" position="0 -0.3 0" align="center" width="3" color="#000"></a-text>
@@ -278,25 +277,25 @@
                 <a-text value="Livres" position="0 2.5 0" align="center" color="#333" width="6"></a-text>
                 
                 <!-- Bookshelf -->
-                <a-box position="0 1.5 0" width="3" height="2.5" depth="0.4" color="#654321" static-body
+                <a-box position="0 1.5 0" width="3" height="2.5" depth="0.4" color="#654321" product-collision solid
                        material="color: #654321; roughness: 0.8"></a-box>
                 
                 <!-- Book 1 -->
-                <a-entity class="product" data-id="book1" data-name="Roman Bestseller" data-price="22" position="-0.8 1.8 0.3" static-body>
+                <a-entity class="product" data-id="book1" data-name="Roman Bestseller" data-price="22" position="-0.8 1.8 0.3" product-collision solid>
                     <a-box color="#C0392B" depth="0.15" height="1" width="0.7"
                            material="color: #C0392B; roughness: 0.7"></a-box>
                     <a-text value="Roman\n22€" position="0 -0.6 0" align="center" width="3" color="#000"></a-text>
                 </a-entity>
                 
                 <!-- Book 2 -->
-                <a-entity class="product" data-id="book2" data-name="Guide Cuisine" data-price="28" position="0 1.8 0.3" static-body>
+                <a-entity class="product" data-id="book2" data-name="Guide Cuisine" data-price="28" position="0 1.8 0.3" product-collision solid>
                     <a-box color="#16A085" depth="0.15" height="1" width="0.7"
                            material="color: #16A085; roughness: 0.7"></a-box>
                     <a-text value="Cuisine\n28€" position="0 -0.6 0" align="center" width="3" color="#000"></a-text>
                 </a-entity>
                 
                 <!-- Book 3 -->
-                <a-entity class="product" data-id="book3" data-name="Encyclopédie" data-price="35" position="0.8 1.8 0.3" static-body>
+                <a-entity class="product" data-id="book3" data-name="Encyclopédie" data-price="35" position="0.8 1.8 0.3" product-collision solid>
                     <a-box color="#2C3E50" depth="0.15" height="1" width="0.7"
                            material="color: #2C3E50; roughness: 0.7"></a-box>
                     <a-text value="Encyclopedia\n35€" position="0 -0.6 0" align="center" width="3" color="#000"></a-text>
@@ -308,25 +307,25 @@
                 <a-text value="Sport" position="0 2.5 0" align="center" color="#333" width="6"></a-text>
                 
                 <!-- Display Table -->
-                <a-box position="0 0.8 0" width="4" height="0.1" depth="2" color="#8B7355" static-body
+                <a-box position="0 0.8 0" width="4" height="0.1" depth="2" color="#8B7355" product-collision solid
                        material="color: #8B7355; metalness: 0.3; roughness: 0.7"></a-box>
                 
                 <!-- Basketball -->
-                <a-entity class="product" data-id="basketball" data-name="Ballon de Basket" data-price="35" position="-1 1.5 0" static-body>
+                <a-entity class="product" data-id="basketball" data-name="Ballon de Basket" data-price="35" position="-1 1.5 0" product-collision solid>
                     <a-sphere color="#FF6600" radius="0.4"
                               material="color: #FF6600; roughness: 0.8"></a-sphere>
                     <a-text value="Basket\n35€" position="0 -0.6 0" align="center" width="3" color="#000"></a-text>
                 </a-entity>
                 
                 <!-- Yoga Mat -->
-                <a-entity class="product" data-id="yogamat" data-name="Tapis de Yoga" data-price="45" position="1 1 0" static-body>
+                <a-entity class="product" data-id="yogamat" data-name="Tapis de Yoga" data-price="45" position="1 1 0" product-collision solid>
                     <a-cylinder color="#9B59B6" height="0.1" radius="0.3"
                                 material="color: #9B59B6; roughness: 0.9"></a-cylinder>
                     <a-text value="Yoga\n45€" position="0 -0.3 0" align="center" width="3" color="#000"></a-text>
                 </a-entity>
                 
                 <!-- Dumbbells -->
-                <a-entity class="product" data-id="dumbbells" data-name="Haltères 5kg" data-price="55" position="-1 1 -1.5" static-body>
+                <a-entity class="product" data-id="dumbbells" data-name="Haltères 5kg" data-price="55" position="-1 1 -1.5" product-collision solid>
                     <a-cylinder color="#34495E" height="0.8" radius="0.15" rotation="0 0 90"
                                 material="color: #34495E; metalness: 0.8; roughness: 0.2"></a-cylinder>
                     <a-sphere color="#34495E" radius="0.2" position="-0.5 0 0"
@@ -364,14 +363,14 @@
         </a-entity>
 
         <!-- Camera/Player -->
-        <a-entity id="rig" position="0 1.6 5" kinematic-body>
+        <a-entity id="rig" position="0 1.6 5" movement-constraints>
             <a-camera id="camera" look-controls wasd-controls="acceleration: 50">
-                <a-cursor color="#4CC3D9" raycaster="objects: .product"></a-cursor>
+                <a-cursor color="#4CC3D9" raycaster="objects: .product, .purchase-btn, .qty-btn"></a-cursor>
             </a-camera>
         </a-entity>
         
         <!-- Shopping Cart Visual Representation -->
-        <a-entity id="cart-visual" position="9 1 9" static-body>
+        <a-entity id="cart-visual" position="9 1 9" product-collision solid>
             <a-box position="0 0.5 0" width="1" height="0.8" depth="0.8" color="#E74C3C"
                    material="color: #E74C3C; opacity: 0.8; metalness: 0.5"></a-box>
             <a-text value="🛒 PANIER" position="0 1.2 0" align="center" width="4" color="#E74C3C"></a-text>
