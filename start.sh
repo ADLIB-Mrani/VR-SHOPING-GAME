@@ -17,9 +17,16 @@ elif command -v python3 &> /dev/null; then
     python3 -m http.server 8080
 elif command -v python &> /dev/null; then
     echo "✓ Python found"
-    echo "Starting with Python..."
-    echo "Open your browser at: http://localhost:8080"
-    python -m SimpleHTTPServer 8080
+    # Check Python version and use appropriate module
+    if python -c "import sys; exit(0 if sys.version_info.major == 3 else 1)" 2>/dev/null; then
+        echo "Starting with Python 3..."
+        echo "Open your browser at: http://localhost:8080"
+        python -m http.server 8080
+    else
+        echo "Starting with Python 2..."
+        echo "Open your browser at: http://localhost:8080"
+        python -m SimpleHTTPServer 8080
+    fi
 elif command -v php &> /dev/null; then
     echo "✓ PHP found"
     echo "Starting with PHP..."

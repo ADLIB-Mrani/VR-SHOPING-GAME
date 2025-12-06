@@ -15,13 +15,14 @@ if %ERRORLEVEL% EQU 0 (
     goto :end
 )
 
-REM Check if Python 3 is available
+REM Check if Python is available
 where python >nul 2>nul
 if %ERRORLEVEL% EQU 0 (
     echo [OK] Python found
     echo Starting with Python...
     echo Open your browser at: http://localhost:8080
-    python -m http.server 8080
+    REM Try Python 3 http.server first, fall back to Python 2 if needed
+    python -m http.server 8080 2>nul || python -m SimpleHTTPServer 8080
     goto :end
 )
 

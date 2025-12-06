@@ -41,7 +41,7 @@ class DeliveryAPI {
         }
         
         console.error('Failed to create order after all retries:', lastError);
-        throw new Error('Impossible de créer la commande. Veuillez réessayer plus tard.');
+        throw new Error('Unable to create order. Please try again later.');
     }
 
     /**

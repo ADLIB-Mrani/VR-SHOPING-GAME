@@ -42,11 +42,13 @@ function initVRStore() {
     
     // Update cart display
     updateCartDisplay();
-    
-    // Show welcome notification
-    setTimeout(() => {
-        showNotification('Bienvenue! Explorez le magasin et ajoutez des produits à votre panier 🛒');
-    }, 1000);
+}
+
+/**
+ * Show welcome notification after scene is ready
+ */
+function showWelcomeNotification() {
+    showNotification('Bienvenue! Explorez le magasin et ajoutez des produits à votre panier 🛒');
 }
 
 /**
@@ -93,6 +95,11 @@ function closeHelp() {
  */
 function setupProductInteractions() {
     const products = document.querySelectorAll('.product');
+    
+    // Show welcome notification once scene is fully loaded
+    setTimeout(() => {
+        showWelcomeNotification();
+    }, 500);
     
     products.forEach(product => {
         // Add hover effect
