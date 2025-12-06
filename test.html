@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VR Shopping Game - Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2C3E50;
+            text-align: center;
+        }
+        h2 {
+            color: #4CC3D9;
+            border-bottom: 2px solid #4CC3D9;
+            padding-bottom: 10px;
+        }
+        button {
+            background: #4CC3D9;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #3BA3BC;
+        }
+        .result {
+            background: #f8f9fa;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #27AE60;
+        }
+        .error {
+            border-left-color: #E74C3C;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            padding: 8px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        .success { color: #27AE60; font-weight: bold; }
+        .fail { color: #E74C3C; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>🎮 VR Shopping Game - Tests</h1>
+    
+    <div class="test-section">
+        <h2>✅ Tests du Système de Panier</h2>
+        <button onclick="testCart()">Tester le Panier</button>
+        <div id="cart-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>📦 Tests du Catalogue Produits</h2>
+        <button onclick="testProducts()">Tester les Produits</button>
+        <div id="product-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🚚 Tests de l'API Livraison</h2>
+        <button onclick="testDelivery()">Tester la Livraison</button>
+        <div id="delivery-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🔗 Tests de Navigation</h2>
+        <button onclick="window.location.href='index.html'">Ouvrir le Magasin VR</button>
+        <button onclick="window.open('index.html', '_blank')">Ouvrir dans un Nouvel Onglet</button>
+    </div>
+
+    <script src="js/cart-system.js"></script>
+    <script src="js/product-interactions.js"></script>
+    <script src="js/delivery-api.js"></script>
+
+    <script>
+        function testCart() {
+            const results = document.getElementById('cart-results');
+            results.innerHTML = '<p>Tests en cours...</p>';
+            
+            let output = '<ul>';
+            let allPassed = true;
+
+            // Test 1: Create cart system
+            try {
+                const cart = new CartSystem();
+                output += '<li class="success">✓ CartSystem créé avec succès</li>';
+            } catch (e) {
+                output += `<li class="fail">✗ Erreur création CartSystem: ${e.message}</li>`;
+                allPassed = false;
+            }
+
+            // Test 2: Add item to cart
+            try {
+                const cart = new CartSystem();
+                cart.clearCart();
+                const result = cart.addItem({ id: 'test1', name: 'Test Product', price: 99 });
+                if (result.length === 1) {
+                    output += '<li class="success">✓ Ajout d\'article au panier réussi</li>';
+                } else {
+                    output += '<li class="fail">✗ Problème d\'ajout au panier</li>';
+                    allPassed = false;
+                }
+            } catch (e) {
+                output += `<li class="fail">✗ Erreur ajout article: ${e.message}</li>`;
+                allPassed = false;
+            }
+
+            // Test 3: Calculate total
+            try {
+                const cart = new CartSystem();
+                cart.clearCart();
+                cart.addItem({ id: 'test1', name: 'Test 1', price: 50 });
+                cart.addItem({ id: 'test2', name: 'Test 2', price: 30 });
+                const total = cart.calculateTotal();
+                if (total === 80) {
+                    output += '<li class="success">✓ Calcul du total correct (80€)</li>';
+                } else {
+                    output += `<li class="fail">✗ Calcul du total incorrect: ${total}€ au lieu de 80€</li>`;
+                    allPassed = false;
+                }
+            } catch (e) {
+                output += `<li class="fail">✗ Erreur calcul total: ${e.message}</li>`;
+                allPassed = false;
+            }
+
+            // Test 4: Remove item
+            try {
+                const cart = new CartSystem();
+                cart.clearCart();
+                cart.addItem({ id: 'test1', name: 'Test', price: 50 });
+                const removed = cart.removeItem('test1');
+                if (removed.length === 0) {
+                    output += '<li class="success">✓ Suppression d\'article réussie</li>';
+                } else {
+                    output += '<li class="fail">✗ Problème de suppression</li>';
+                    allPassed = false;
+                }
+            } catch (e) {
+                output += `<li class="fail">✗ Erreur suppression: ${e.message}</li>`;
+                allPassed = false;
+            }
+
+            output += '</ul>';
+            
+            if (allPassed) {
+                output = '<div class="result"><strong>Tous les tests du panier sont passés! ✓</strong></div>' + output;
+            } else {
+                output = '<div class="result error"><strong>Certains tests ont échoué! ✗</strong></div>' + output;
+            }
+            
+            results.innerHTML = output;
+        }
+
+        function testProducts() {
+            const results = document.getElementById('product-results');
+            results.innerHTML = '<p>Tests en cours...</p>';
+            
+            let output = '<ul>';
+            let allPassed = true;
+
+            // Test 1: Load product catalog
+            try {
+                if (typeof PRODUCT_CATALOG !== 'undefined' && Object.keys(PRODUCT_CATALOG).length > 0) {
+                    output += `<li class="success">✓ Catalogue chargé: ${Object.keys(PRODUCT_CATALOG).length} produits</li>`;
+                } else {
+                    output += '<li class="fail">✗ Catalogue vide ou non chargé</li>';
+                    allPassed = false;
+                }
+            } catch (e) {
+                output += `<li class="fail">✗ Erreur chargement catalogue: ${e.message}</li>`;
+                allPassed = false;
+            }
+
+            // Test 2: Get product info
+            try {
+                const product = getProductInfo('laptop');
+                if (product && product.name && product.price) {
+                    output += `<li class="success">✓ Récupération produit: ${product.name} - ${product.price}€</li>`;
+                } else {
+                    output += '<li class="fail">✗ Produit non trouvé</li>';
+                    allPassed = false;
+                }
+            } catch (e) {
+                output += `<li class="fail">✗ Erreur récupération produit: ${e.message}</li>`;
+                allPassed = false;
+            }
+
+            // Test 3: Calculate shipping
+            try {
+                const cart = [
+                    { id: 'laptop', quantity: 1, price: 999 }
+                ];
+                const shipping = calculateShipping(cart);
+                output += `<li class="success">✓ Calcul livraison: ${shipping.cost}€ (Poids: ${shipping.weight}kg)</li>`;
+            } catch (e) {
+                output += `<li class="fail">✗ Erreur calcul livraison: ${e.message}</li>`;
+                allPassed = false;
+            }
+
+            output += '</ul>';
+            
+            if (allPassed) {
+                output = '<div class="result"><strong>Tous les tests produits sont passés! ✓</strong></div>' + output;
+            } else {
+                output = '<div class="result error"><strong>Certains tests ont échoué! ✗</strong></div>' + output;
+            }
+            
+            results.innerHTML = output;
+        }
+
+        async function testDelivery() {
+            const results = document.getElementById('delivery-results');
+            results.innerHTML = '<p>Tests en cours...</p>';
+            
+            let output = '<ul>';
+            let allPassed = true;
+
+            // Test 1: Create delivery API
+            try {
+                const api = new DeliveryAPI();
+                output += '<li class="success">✓ API de livraison créée</li>';
+            } catch (e) {
+                output += `<li class="fail">✗ Erreur création API: ${e.message}</li>`;
+                allPassed = false;
+            }
+
+            // Test 2: Create order (simulated)
+            try {
+                const api = new DeliveryAPI();
+                const orderData = {
+                    orderNumber: 'TEST123',
+                    name: 'Test User',
+                    address: '123 Test St',
+                    city: 'Paris',
+                    postal: '75001',
+                    phone: '0612345678',
+                    items: [{ id: 'laptop', name: 'Laptop', price: 999, quantity: 1 }],
+                    total: 999,
+                    orderDate: new Date().toISOString()
+                };
+                const result = await api.createOrder(orderData);
+                if (result.success && result.trackingNumber) {
+                    output += `<li class="success">✓ Commande créée: ${result.trackingNumber}</li>`;
+                } else {
+                    output += '<li class="fail">✗ Création commande échouée</li>';
+                    allPassed = false;
+                }
+            } catch (e) {
+                output += `<li class="fail">✗ Erreur création commande: ${e.message}</li>`;
+                allPassed = false;
+            }
+
+            // Test 3: Track order
+            try {
+                const api = new DeliveryAPI();
+                const tracking = await api.trackOrder('TEST123');
+                if (tracking.orderId) {
+                    output += `<li class="success">✓ Suivi commande: ${tracking.status}</li>`;
+                } else {
+                    output += '<li class="fail">✗ Suivi commande échoué</li>';
+                    allPassed = false;
+                }
+            } catch (e) {
+                output += `<li class="fail">✗ Erreur suivi: ${e.message}</li>`;
+                allPassed = false;
+            }
+
+            // Test 4: Validate address
+            try {
+                const api = new DeliveryAPI();
+                const validation = api.validateAddress({
+                    street: '123 Rue de la Paix',
+                    city: 'Paris',
+                    postalCode: '75001',
+                    phone: '0612345678'
+                });
+                if (validation.valid) {
+                    output += '<li class="success">✓ Validation adresse réussie</li>';
+                } else {
+                    output += `<li class="fail">✗ Validation échouée: ${validation.errors.join(', ')}</li>`;
+                    allPassed = false;
+                }
+            } catch (e) {
+                output += `<li class="fail">✗ Erreur validation: ${e.message}</li>`;
+                allPassed = false;
+            }
+
+            output += '</ul>';
+            
+            if (allPassed) {
+                output = '<div class="result"><strong>Tous les tests de livraison sont passés! ✓</strong></div>' + output;
+            } else {
+                output = '<div class="result error"><strong>Certains tests ont échoué! ✗</strong></div>' + output;
+            }
+            
+            results.innerHTML = output;
+        }
+    </script>
+</body>
+</html>
