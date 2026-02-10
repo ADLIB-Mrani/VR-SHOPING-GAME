@@ -9,7 +9,8 @@ const CONFIG = {
         NAME: 'VR Shopping Game',
         VERSION: '1.0.0',
         CURRENCY: '€',
-        LOCALE: 'fr-FR'
+        LOCALE: 'fr-FR',
+        ORDER_PREFIX: 'VR'
     },
 
     // Cart Settings
@@ -46,7 +47,8 @@ const CONFIG = {
     UI: {
         NOTIFICATION_DURATION: 2000,
         ANIMATION_DURATION: 300,
-        LOADING_DELAY: 500
+        LOADING_DELAY: 500,
+        SCENE_INIT_DELAY: 1000
     },
 
     // Validation Rules
@@ -58,6 +60,12 @@ const CONFIG = {
         CITY_MIN_LENGTH: 2,
         CITY_MAX_LENGTH: 100,
         POSTAL_CODE_PATTERN: /^\d{5}$/,
+        // French phone number formats accepted:
+        // - 0123456789 (10 digits starting with 0)
+        // - 01 23 45 67 89 (with spaces)
+        // - 01.23.45.67.89 (with dots)
+        // - 01-23-45-67-89 (with dashes)
+        // - +33 123456789 or 0033 123456789 (international)
         PHONE_PATTERN: /^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/
     },
 

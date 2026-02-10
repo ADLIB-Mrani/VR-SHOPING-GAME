@@ -216,9 +216,15 @@ function setupProductInteractions() {
  */
 function addToCart(id, name, price) {
     try {
-        // Validate inputs
-        if (!id || !name || typeof price !== 'number' || price < 0) {
-            throw new Error('Invalid product data');
+        // Validate inputs with detailed error messages
+        if (!id) {
+            throw new Error('Invalid product data: missing product ID');
+        }
+        if (!name) {
+            throw new Error('Invalid product data: missing product name');
+        }
+        if (typeof price !== 'number' || price < 0) {
+            throw new Error('Invalid product data: price must be a positive number');
         }
         
         // Check if product already in cart
@@ -461,7 +467,7 @@ function handleDeliverySubmit(event) {
             items: deepClone(cart),
             total: calculateTotal(),
             orderDate: new Date().toISOString(),
-            orderNumber: generateId('VR')
+            orderNumber: generateId(CONFIG.APP.ORDER_PREFIX)
         };
         
         // Process order

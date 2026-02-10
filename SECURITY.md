@@ -119,6 +119,11 @@ If implementing payment processing:
 
 ## Vulnerability Reporting
 
-If you discover a security vulnerability, please email: security@vr-store.com
+If you discover a security vulnerability, please report it responsibly:
+
+**Note:** The email address below is a placeholder. For production deployment, configure a real security contact email.
+
+- Email: security@vr-store.com (configure before production)
+- Or create a private security advisory on GitHub
 
 Please do not publicly disclose security issues until they have been addressed.

@@ -251,8 +251,20 @@ function sortProducts(criteria) {
 if (typeof window !== 'undefined') {
     window.addEventListener('DOMContentLoaded', function() {
         // Wait for VR scene to load
-        setTimeout(() => {
-            initSearchAndFilter();
-        }, 1000);
+        const scene = document.querySelector('a-scene');
+        if (scene) {
+            if (scene.hasLoaded) {
+                initSearchAndFilter();
+            } else {
+                scene.addEventListener('loaded', () => {
+                    initSearchAndFilter();
+                });
+            }
+        } else {
+            // Fallback if scene not found
+            setTimeout(() => {
+                initSearchAndFilter();
+            }, CONFIG.UI.SCENE_INIT_DELAY);
+        }
     });
 }

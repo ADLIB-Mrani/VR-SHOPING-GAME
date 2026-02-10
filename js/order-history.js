@@ -233,8 +233,21 @@ function getOrderStatistics() {
 // Initialize when DOM is ready
 if (typeof window !== 'undefined') {
     window.addEventListener('DOMContentLoaded', function() {
-        setTimeout(() => {
-            initOrderHistory();
-        }, 1000);
+        // Wait for VR scene to load
+        const scene = document.querySelector('a-scene');
+        if (scene) {
+            if (scene.hasLoaded) {
+                initOrderHistory();
+            } else {
+                scene.addEventListener('loaded', () => {
+                    initOrderHistory();
+                });
+            }
+        } else {
+            // Fallback if scene not found
+            setTimeout(() => {
+                initOrderHistory();
+            }, CONFIG.UI.SCENE_INIT_DELAY);
+        }
     });
 }

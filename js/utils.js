@@ -184,13 +184,30 @@ function removeFromStorage(key) {
 }
 
 /**
- * Generates a unique ID
+ * Generates a unique ID using crypto API when available
  * @param {string} prefix - Optional prefix for the ID
  * @returns {string} Unique ID
  */
 function generateId(prefix = '') {
+    // Use crypto.randomUUID if available (modern browsers)
+    if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+        const uuid = crypto.randomUUID();
+        return prefix ? `${prefix}-${uuid}` : uuid;
+    }
+    
+    // Fallback to timestamp + crypto random if available
     const timestamp = Date.now();
-    const random = Math.random().toString(36).substring(2, 11);
+    let random;
+    
+    if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+        const array = new Uint32Array(1);
+        crypto.getRandomValues(array);
+        random = array[0].toString(36);
+    } else {
+        // Final fallback to Math.random (less secure but universal)
+        random = Math.random().toString(36).substring(2, 11);
+    }
+    
     return prefix ? `${prefix}-${timestamp}-${random}` : `${timestamp}-${random}`;
 }
 
