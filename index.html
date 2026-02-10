@@ -3,14 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="VR Shopping Game - Magasin en réalité virtuelle avec livraison réelle">
+    <meta name="keywords" content="VR, shopping, réalité virtuelle, e-commerce, A-Frame">
+    <meta name="author" content="ADLIB-Mrani">
     <title>VR Shopping Game - Magasin en Réalité Virtuelle</title>
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.0.0/dist/aframe-extras.min.js"></script>
+    <!-- Core game systems -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/event-system.js"></script>
+    <script src="js/game-state.js"></script>
+    <script src="js/game-loop.js"></script>
+    <script src="js/input-manager.js"></script>
+    <script src="js/debug-tools.js"></script>
+    <!-- VR Store systems -->
     <script src="js/collision-system.js"></script>
     <script src="js/vr-store.js"></script>
     <script src="js/cart-system.js"></script>
     <script src="js/product-interactions.js"></script>
     <script src="js/proximity-purchase.js"></script>
+    <script src="js/search-filter.js"></script>
+    <script src="js/order-history.js"></script>
+    <!-- Game systems integration -->
+    <script src="js/game-integration.js"></script>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>

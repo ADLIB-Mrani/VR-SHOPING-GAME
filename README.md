@@ -7,20 +7,25 @@ Un jeu de shopping en réalité virtuelle où vous faites vos achats dans un env
 ### Expérience VR
 - **Navigation Immersive**: Déplacez-vous librement dans un magasin virtuel 3D
 - **Interactions Réalistes**: Regardez et cliquez sur les produits pour les examiner
-- **Environnement Détaillé**: Magasin complet avec différentes sections (électronique, vêtements, décoration, alimentation)
+- **Environnement Détaillé**: Magasin complet avec 6 sections différentes
 - **Compatible VR/Desktop**: Fonctionne avec des casques VR (Oculus, HTC Vive) ou un navigateur classique
 
-### Système de Shopping
-- **Catalogue Produits**: 8+ produits dans différentes catégories
+### Système de Shopping Avancé
+- **Catalogue Étendu**: 20+ produits dans 6 catégories différentes
+- **Recherche de Produits**: Recherche en temps réel avec filtrage intelligent
+- **Filtres par Catégorie**: Filtrez par Électronique, Vêtements, Décoration, Alimentation, Livres, Sport
 - **Panier Interactif**: Ajoutez, supprimez et modifiez les quantités en temps réel
 - **Prix Dynamiques**: Calcul automatique du total avec mise à jour instantanée
-- **Interface Intuitive**: UI moderne et responsive
+- **Livraison Gratuite**: Livraison offerte à partir de 100€
+- **Interface Intuitive**: UI moderne, responsive et accessible
 
-### Livraison Réelle
-- **Formulaire de Livraison**: Saisie complète des informations de livraison
-- **Intégration API**: Connexion avec services de livraison réels (Colissimo, Chronopost, DHL)
+### Gestion des Commandes
+- **Formulaire de Livraison Sécurisé**: Validation complète des informations de livraison
+- **Validation Avancée**: Validation des codes postaux français et numéros de téléphone
+- **Historique des Commandes**: Consultez toutes vos commandes passées avec détails complets
+- **Protection XSS**: Tous les inputs sont validés et sanitisés
+- **Persistance Intelligente**: Panier sauvegardé pendant 7 jours
 - **Suivi de Commande**: Numéro de suivi et estimation de livraison
-- **Historique**: Conservation de toutes vos commandes
 
 ## 🚀 Installation
 
@@ -108,10 +113,42 @@ Pour un guide d'installation détaillé avec dépannage, voir **[INSTALLATION.md
 
 ### Shopping
 1. **Explorer**: Déplacez-vous dans le magasin pour découvrir les produits
-2. **Sélectionner**: Regardez un produit et cliquez dessus pour l'ajouter au panier
-3. **Gérer le panier**: Utilisez le panneau à droite pour modifier les quantités
-4. **Commander**: Cliquez sur "Commander" et remplissez le formulaire de livraison
-5. **Confirmer**: Votre commande est envoyée et sera livrée dans le monde réel!
+2. **Rechercher**: Utilisez la barre de recherche pour trouver rapidement un produit
+3. **Filtrer**: Sélectionnez une catégorie dans le menu déroulant pour filtrer les produits
+4. **Sélectionner**: Regardez un produit et cliquez dessus pour l'ajouter au panier
+5. **Gérer le panier**: Utilisez le panneau à droite pour modifier les quantités
+6. **Voir l'historique**: Cliquez sur "📋 Mes commandes" pour voir vos commandes précédentes
+7. **Commander**: Cliquez sur "Commander" et remplissez le formulaire de livraison
+8. **Confirmer**: Votre commande est validée et sera livrée dans le monde réel!
+
+### Fonctionnalités Avancées
+- **Recherche en temps réel**: Tapez dans la barre de recherche pour filtrer instantanément
+- **Filtres combinés**: Combinez recherche et filtre de catégorie
+- **Badge livraison gratuite**: Apparaît automatiquement quand le total dépasse 100€
+- **Validation intelligente**: Messages d'erreur clairs si les informations sont incorrectes
+
+### Mode Développeur / Debug
+Active des outils de débogage professionnels pour le développement:
+- **Activation**: 
+  - URL: `?debug=true` (ex: `http://localhost:8080?debug=true`)
+  - Clavier: `Ctrl + Shift + D`
+- **Fonctionnalités**:
+  - Compteur FPS en temps réel
+  - Métriques de performance (frame time, update time, render time)
+  - Commandes console (tapez `debug.help()` dans la console)
+  - Monitoring des événements
+  - Inspection de l'état du jeu
+
+**Commandes console disponibles:**
+```javascript
+debug.fps()      // Afficher/masquer FPS
+debug.perf()     // Afficher/masquer panel performance
+debug.state()    // Voir l'état actuel du jeu
+debug.cart()     // Voir le contenu du panier
+debug.events()   // Lister les événements
+debug.pause()    // Mettre en pause
+debug.resume()   // Reprendre
+```
 
 ## 📦 Structure du Projet
 
@@ -121,12 +158,26 @@ VR-SHOPING-GAME/
 ├── package.json            # Configuration npm
 ├── API.md                  # Documentation API
 ├── README.md               # Ce fichier
+├── SECURITY.md             # Guide de sécurité
+├── GAME-DEVELOPMENT-PATTERNS.md  # Patterns de développement jeu
 ├── css/
 │   └── style.css          # Styles de l'interface
 ├── js/
+│   ├── config.js          # Configuration centralisée
+│   ├── utils.js           # Fonctions utilitaires
+│   ├── event-system.js    # Système d'événements (pub/sub)
+│   ├── game-state.js      # Machine à états du jeu
+│   ├── game-loop.js       # Boucle de jeu (requestAnimationFrame)
+│   ├── input-manager.js   # Gestion centralisée des inputs
+│   ├── debug-tools.js     # Outils de débogage
+│   ├── game-integration.js # Intégration des systèmes de jeu
 │   ├── vr-store.js        # Logique principale du magasin
 │   ├── cart-system.js     # Système de panier
 │   ├── product-interactions.js  # Interactions produits
+│   ├── collision-system.js      # Système de collision
+│   ├── proximity-purchase.js    # Achat de proximité
+│   ├── search-filter.js         # Recherche et filtres
+│   ├── order-history.js         # Historique des commandes
 │   └── delivery-api.js    # Intégration livraison
 └── assets/
     ├── textures/          # Textures pour l'environnement VR
@@ -139,8 +190,31 @@ VR-SHOPING-GAME/
 - **A-Frame Extras**: Composants additionnels pour A-Frame
 - **WebXR**: API pour la réalité virtuelle web
 - **LocalStorage**: Persistance des données (panier, commandes)
-- **JavaScript ES6+**: Logique applicative moderne
-- **CSS3**: Interface utilisateur responsive
+- **JavaScript ES6+**: Logique applicative moderne avec modules
+- **CSS3**: Interface utilisateur responsive et accessible
+- **JSDoc**: Documentation du code
+
+### Patterns de Développement Jeu
+- **State Machine**: Gestion du cycle de vie du jeu
+- **Game Loop**: Boucle avec requestAnimationFrame et delta time
+- **Event System**: Architecture événementielle (pub/sub)
+- **Input Manager**: Gestion centralisée des entrées
+- **Debug Tools**: Outils de débogage professionnels
+
+Voir [GAME-DEVELOPMENT-PATTERNS.md](GAME-DEVELOPMENT-PATTERNS.md) pour plus de détails.
+
+## 🔒 Sécurité
+
+Le projet implémente plusieurs couches de sécurité:
+
+- **Validation des entrées**: Tous les formulaires sont validés côté client
+- **Sanitisation HTML**: Protection contre les attaques XSS
+- **Validation française**: Codes postaux (5 chiffres) et numéros de téléphone
+- **Headers de sécurité**: Recommandations CSP et autres headers (voir [SECURITY.md](SECURITY.md))
+- **Gestion des erreurs**: Messages d'erreur clairs et informatifs
+- **Expiration du panier**: Les données expirent après 7 jours
+
+Pour plus de détails sur la sécurité, consultez [SECURITY.md](SECURITY.md).
 
 ## 🔌 Intégration API
 
@@ -183,10 +257,12 @@ newproduct: {
 
 ## 🔐 Sécurité et Confidentialité
 
-- Données stockées localement dans le navigateur
-- Pas de transmission de données sensibles sans HTTPS
-- Validation des formulaires côté client
-- API sécurisée avec authentification (en production)
+- **Validation avancée**: Validation des codes postaux français (5 chiffres) et numéros de téléphone
+- **Protection XSS**: Sanitisation de toutes les entrées utilisateur
+- **Données locales**: Stockage sécurisé dans le navigateur avec expiration automatique
+- **Pas de transmission sensible**: Aucune donnée sensible transmise sans HTTPS
+- **Messages d'erreur clairs**: Validation des formulaires avec retours informatifs
+- **API sécurisée**: Authentification recommandée pour la production (voir [SECURITY.md](SECURITY.md))
 
 ## 🐛 Dépannage
 
@@ -201,9 +277,20 @@ newproduct: {
 - Rechargez la page
 
 ### Le panier ne se met pas à jour
-- Vérifiez que LocalStorage est activé
-- Videz le cache du navigateur
-- Vérifiez la console pour les erreurs
+- Vérifiez que LocalStorage est activé dans votre navigateur
+- Videz le cache du navigateur si nécessaire
+- Vérifiez la console pour les erreurs JavaScript
+- Le panier expire automatiquement après 7 jours
+
+### La recherche ne fonctionne pas
+- Assurez-vous que JavaScript est activé
+- Vérifiez que le scène VR est complètement chargée
+- Rechargez la page si nécessaire
+
+### Problèmes de validation du formulaire
+- Les codes postaux doivent être au format français (5 chiffres)
+- Les numéros de téléphone doivent être valides (format français)
+- Tous les champs sont requis et ont des longueurs minimales/maximales
 
 ## 🤝 Contribution
 
@@ -237,14 +324,30 @@ Pour toute question ou suggestion:
 
 ## 🔮 Roadmap
 
-- [ ] Ajout de plus de produits et catégories
-- [ ] Intégration de modèles 3D réalistes
-- [ ] Système de paiement en ligne
-- [ ] Multijoueur (shopping avec des amis)
-- [ ] Support de plus de langues
-- [ ] Mode démo guidé
-- [ ] Intégration avec services de livraison réels
-- [ ] Application mobile VR
+### Fonctionnalités Implémentées ✅
+- [x] 20+ produits dans 6 catégories
+- [x] Recherche de produits en temps réel
+- [x] Filtres par catégorie
+- [x] Historique des commandes complet
+- [x] Validation avancée des formulaires
+- [x] Protection XSS et sécurité renforcée
+- [x] Livraison gratuite à partir de 100€
+- [x] Interface accessible et responsive
+- [x] Système de collision et physique
+- [x] Achat par proximité (style Call of Duty)
+- [x] Glisser-déposer vers le panier
+
+### Prochaines Améliorations 🚀
+- [ ] Intégration de modèles 3D réalistes pour les produits
+- [ ] Système de paiement en ligne sécurisé
+- [ ] Mode multijoueur (shopping avec des amis)
+- [ ] Support de plus de langues (anglais, espagnol)
+- [ ] Mode démo guidé pour nouveaux utilisateurs
+- [ ] Intégration avec services de livraison réels via API
+- [ ] Application mobile VR native
+- [ ] Système de recommandations de produits
+- [ ] Avis et notes des produits
+- [ ] Programme de fidélité
 
 ---
 
