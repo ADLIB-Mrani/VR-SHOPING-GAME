@@ -127,6 +127,29 @@ Pour un guide d'installation détaillé avec dépannage, voir **[INSTALLATION.md
 - **Badge livraison gratuite**: Apparaît automatiquement quand le total dépasse 100€
 - **Validation intelligente**: Messages d'erreur clairs si les informations sont incorrectes
 
+### Mode Développeur / Debug
+Active des outils de débogage professionnels pour le développement:
+- **Activation**: 
+  - URL: `?debug=true` (ex: `http://localhost:8080?debug=true`)
+  - Clavier: `Ctrl + Shift + D`
+- **Fonctionnalités**:
+  - Compteur FPS en temps réel
+  - Métriques de performance (frame time, update time, render time)
+  - Commandes console (tapez `debug.help()` dans la console)
+  - Monitoring des événements
+  - Inspection de l'état du jeu
+
+**Commandes console disponibles:**
+```javascript
+debug.fps()      // Afficher/masquer FPS
+debug.perf()     // Afficher/masquer panel performance
+debug.state()    // Voir l'état actuel du jeu
+debug.cart()     // Voir le contenu du panier
+debug.events()   // Lister les événements
+debug.pause()    // Mettre en pause
+debug.resume()   // Reprendre
+```
+
 ## 📦 Structure du Projet
 
 ```
@@ -136,11 +159,18 @@ VR-SHOPING-GAME/
 ├── API.md                  # Documentation API
 ├── README.md               # Ce fichier
 ├── SECURITY.md             # Guide de sécurité
+├── GAME-DEVELOPMENT-PATTERNS.md  # Patterns de développement jeu
 ├── css/
 │   └── style.css          # Styles de l'interface
 ├── js/
 │   ├── config.js          # Configuration centralisée
 │   ├── utils.js           # Fonctions utilitaires
+│   ├── event-system.js    # Système d'événements (pub/sub)
+│   ├── game-state.js      # Machine à états du jeu
+│   ├── game-loop.js       # Boucle de jeu (requestAnimationFrame)
+│   ├── input-manager.js   # Gestion centralisée des inputs
+│   ├── debug-tools.js     # Outils de débogage
+│   ├── game-integration.js # Intégration des systèmes de jeu
 │   ├── vr-store.js        # Logique principale du magasin
 │   ├── cart-system.js     # Système de panier
 │   ├── product-interactions.js  # Interactions produits
@@ -163,6 +193,15 @@ VR-SHOPING-GAME/
 - **JavaScript ES6+**: Logique applicative moderne avec modules
 - **CSS3**: Interface utilisateur responsive et accessible
 - **JSDoc**: Documentation du code
+
+### Patterns de Développement Jeu
+- **State Machine**: Gestion du cycle de vie du jeu
+- **Game Loop**: Boucle avec requestAnimationFrame et delta time
+- **Event System**: Architecture événementielle (pub/sub)
+- **Input Manager**: Gestion centralisée des entrées
+- **Debug Tools**: Outils de débogage professionnels
+
+Voir [GAME-DEVELOPMENT-PATTERNS.md](GAME-DEVELOPMENT-PATTERNS.md) pour plus de détails.
 
 ## 🔒 Sécurité
 
