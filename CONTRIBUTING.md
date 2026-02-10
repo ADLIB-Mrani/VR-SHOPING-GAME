@@ -64,17 +64,34 @@ Pour proposer une nouvelle fonctionnalité:
 // Utilisez camelCase pour les variables et fonctions
 const myVariable = 'value';
 
-function myFunction() {
+/**
+ * Utilisez JSDoc pour documenter les fonctions
+ * @param {string} name - Nom du paramètre
+ * @returns {string} Description du retour
+ */
+function myFunction(name) {
     // Commentez le code complexe
     // Utilisez des noms descriptifs
+    return `Hello ${name}`;
 }
 
-// Utilisez des constantes pour les valeurs magiques
-const MAX_ITEMS = 100;
+// Utilisez des constantes depuis config.js
+const MAX_ITEMS = CONFIG.CART.MAX_QUANTITY_PER_ITEM;
 
 // Préférez const et let à var
 const immutableValue = 10;
 let mutableValue = 20;
+
+// Validez et sanitisez toujours les entrées utilisateur
+const safeName = sanitizeHTML(userInput);
+
+// Gérez les erreurs proprement
+try {
+    // Code qui peut échouer
+} catch (error) {
+    console.error('Erreur descriptive:', error);
+    handleError('Message utilisateur convivial', error);
+}
 ```
 
 #### HTML
@@ -113,12 +130,17 @@ let mutableValue = 20;
 Avant de soumettre votre PR, vérifiez:
 
 - [ ] Le code fonctionne correctement
-- [ ] Vous avez testé sur plusieurs navigateurs
+- [ ] Vous avez testé sur plusieurs navigateurs (Chrome, Firefox, Safari)
 - [ ] Le code est propre et bien formaté
-- [ ] Les commentaires expliquent le "pourquoi", pas le "quoi"
+- [ ] Les commentaires JSDoc sont ajoutés pour les nouvelles fonctions
+- [ ] Les entrées utilisateur sont validées et sanitisées
+- [ ] La gestion d'erreurs est implémentée
+- [ ] Les constantes sont utilisées depuis config.js
 - [ ] La documentation est mise à jour si nécessaire
 - [ ] Pas de fichiers inutiles (node_modules, .DS_Store, etc.)
 - [ ] Les messages de commit sont clairs et descriptifs
+- [ ] Aucune vulnérabilité de sécurité introduite
+- [ ] Les performances ne sont pas dégradées
 
 ## 🎯 Zones d'Amélioration Prioritaires
 
@@ -128,10 +150,12 @@ Nous recherchons particulièrement de l'aide sur:
 2. **Textures**: Améliorer les textures de l'environnement
 3. **Animations**: Ajouter des animations plus fluides
 4. **Performance**: Optimiser le chargement et le rendu
-5. **Accessibilité**: Rendre l'application plus accessible
-6. **Tests**: Ajouter des tests automatisés
+5. **Accessibilité**: Rendre l'application plus accessible (WCAG 2.1)
+6. **Tests**: Ajouter des tests automatisés (unit tests, e2e tests)
 7. **Traductions**: Traduire l'application dans d'autres langues
 8. **Documentation**: Améliorer et étendre la documentation
+9. **Sécurité**: Audit de sécurité et améliorations
+10. **Backend**: Intégration avec une vraie API de livraison
 
 ## 🐛 Déboguer
 
