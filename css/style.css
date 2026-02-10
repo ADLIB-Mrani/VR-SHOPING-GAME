@@ -541,6 +541,63 @@ body {
     }
 }
 
+/* Form validation styles */
+.input-error {
+    border-color: #E74C3C !important;
+    background-color: #FFE8E8 !important;
+}
+
+.error-message {
+    color: #E74C3C;
+    font-size: 12px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    padding: 5px;
+    background-color: #FFE8E8;
+    border-radius: 4px;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Free shipping badge */
+.free-shipping {
+    background: linear-gradient(135deg, #27AE60 0%, #2ECC71 100%);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Accessibility improvements */
+button:focus,
+input:focus {
+    outline: 2px solid #4CC3D9;
+    outline-offset: 2px;
+}
+
 /* Loading screen customization */
 .a-loader-title {
     color: #4CC3D9 !important;
@@ -563,5 +620,14 @@ body {
 @media (max-height: 600px) {
     #cart-panel {
         max-height: 60vh;
+    }
+}
+
+/* Print styles */
+@media print {
+    #ui-overlay,
+    #help-btn,
+    #loading-screen {
+        display: none;
     }
 }
