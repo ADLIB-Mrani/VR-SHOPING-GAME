@@ -1,354 +1,117 @@
-# 🎮 VR Shopping Game - Magasin en Réalité Virtuelle
+# NOVA · VR Shopping Game 2.0
 
-Un jeu de shopping en réalité virtuelle où vous faites vos achats dans un environnement VR immersif et recevez vos produits dans le monde réel grâce à un système de livraison intégré.
+**Le magasin immersif du futur, conçu pour le Web.** Une expérience 3D A-Frame/WebXR et une interface de shopping complète. Le projet inclut un vrai backend de paiement/expédition prêt à configurer — le mode découverte fonctionne immédiatement, sans compte marchand.
 
-## 🌟 Fonctionnalités
+> **Important :** les 30 références sont des articles de démonstration. En mode découverte, une « commande » est strictement fictive : aucun paiement, stock réservé, envoi ou numéro de suivi réel. Les ventes sont **désactivées par défaut** et ne doivent être ouvertes qu'après configuration des comptes marchands, du stock et de la conformité juridique. Le paiement réel utilise Stripe Checkout ; la création d'étiquettes réelles peut utiliser Shippo, qui peut facturer des frais. Une étiquette créée ne signifie **pas** que le colis a été physiquement remis au transporteur.
 
-### Expérience VR
-- **Navigation Immersive**: Déplacez-vous librement dans un magasin virtuel 3D
-- **Interactions Réalistes**: Regardez et cliquez sur les produits pour les examiner
-- **Environnement Détaillé**: Magasin complet avec 6 sections différentes
-- **Compatible VR/Desktop**: Fonctionne avec des casques VR (Oculus, HTC Vive) ou un navigateur classique
+## Ce qui fonctionne immédiatement
 
-### Système de Shopping Avancé
-- **Catalogue Étendu**: 20+ produits dans 6 catégories différentes
-- **Recherche de Produits**: Recherche en temps réel avec filtrage intelligent
-- **Filtres par Catégorie**: Filtrez par Électronique, Vêtements, Décoration, Alimentation, Livres, Sport
-- **Panier Interactif**: Ajoutez, supprimez et modifiez les quantités en temps réel
-- **Prix Dynamiques**: Calcul automatique du total avec mise à jour instantanée
-- **Livraison Gratuite**: Livraison offerte à partir de 100€
-- **Interface Intuitive**: UI moderne, responsive et accessible
+- **Showroom 3D généré** : six galeries, décors, lumières, plateforme centrale, trente produits stylisés en 3D, présentoirs, étiquettes, survol et sélection.
+- **Desktop + VR** : clavier ZQSD/WASD, souris, commandes tactiles, manettes WebXR via raycaster, mode VR et plein écran selon les capacités du navigateur/casque.
+- **Catalogue interactif** : 30 articles, 6 catégories, recherches insensibles aux accents, tri et filtres combinés, détails des articles.
+- **Panier** : modification des quantités (limite 10), calcul en centimes, livraison offerte dès 100 €, sauvegarde pendant 7 jours.
+- **Commandes démo** : validation française nom, adresse, email, ville, code postal et téléphone ; historique local clairement marqué **DEMO** et sans conservation des coordonnées.
+- **Accessibilité et responsive** : interactions au clavier, libellés des contrôles, états `aria`, gestion du focus des dialogues, adaptation mobile et réduction des animations.
+- **NOVA Concierge** : conseils personnalisés hors-ligne à partir du catalogue. Option OpenAI côté serveur, sans clé exposée au navigateur.
+- **Qualité** : tests unitaires Node.js, vérification syntaxique et workflow GitHub Actions.
 
-### Gestion des Commandes
-- **Formulaire de Livraison Sécurisé**: Validation complète des informations de livraison
-- **Validation Avancée**: Validation des codes postaux français et numéros de téléphone
-- **Historique des Commandes**: Consultez toutes vos commandes passées avec détails complets
-- **Protection XSS**: Tous les inputs sont validés et sanitisés
-- **Persistance Intelligente**: Panier sauvegardé pendant 7 jours
-- **Suivi de Commande**: Numéro de suivi et estimation de livraison
+## Lancer le jeu en local
 
-## 🚀 Installation
+**Prérequis :** Node.js 20+ et Internet pour charger A-Frame et les polices. Le projet ne nécessite aucun `npm install` pour le serveur local ou les tests.
 
-### ⚡ Installation Ultra-Rapide (0 dépendance!)
-
-**La méthode la plus simple - Aucune installation requise!**
-
-1. **Téléchargez** le projet (bouton vert "Code" → "Download ZIP")
-2. **Décompressez** le fichier ZIP
-3. **Double-cliquez** sur `index.html`
-4. **C'est tout!** Le jeu se lance dans votre navigateur! 🎮
-
-### 🔧 Installation avec Serveur Local (Recommandé pour développement)
-
-#### Prérequis
-- Navigateur web moderne (Chrome recommandé, Firefox, Edge, Safari)
-- Connexion Internet (pour charger A-Frame)
-- **Optionnel**: Node.js, Python, ou PHP pour serveur local
-- **Optionnel**: Casque VR compatible WebXR
-
-#### Étapes d'Installation
-
-1. **Cloner le repository**
-```bash
-git clone https://github.com/ADLIB-Mrani/VR-SHOPING-GAME.git
-cd VR-SHOPING-GAME
-```
-
-2. **Lancement Automatique** (Linux/Mac)
-```bash
-./start.sh
-```
-
-**Lancement Automatique** (Windows)
-```batch
-start.bat
-```
-
-**OU Installation manuelle:**
-
-3. **Installer les dépendances** (optionnel)
-```bash
-npm install
-```
-
-4. **Lancer l'application** - Choisissez une méthode:
-
-**Option A - Avec npm** (Recommandé):
 ```bash
 npm start
 ```
-→ Ouvre automatiquement dans le navigateur!
 
-**Option B - Avec Python 3**:
+Ouvrir **http://localhost:8080**. Si le port 8080 est déjà utilisé :
+
 ```bash
-python -m http.server 8080
+PORT=8765 npm start
 ```
-→ Puis ouvrez `http://localhost:8080`
 
-**Option C - Avec Python 2**:
+Sous Windows, utilisez `start.bat` (nécessite Node.js), et sous Linux/macOS `./start.sh`.
+
+**Ne pas ouvrir** `index.html` en double-cliquant : les modules ES6 chargés en `file://` peuvent être bloqués par le navigateur. Si A-Frame n'est pas accessible (hors-ligne, réseau filtré ou WebGL désactivé), le catalogue HTML, le panier et les commandes démo restent disponibles.
+
+## Contrôles
+
+| Action | Desktop | VR | Mobile |
+|---|---|---|---|
+| Déplacer la vue | ZQSD / WASD / flèches | Manette (thumbstick) | Flèches tactiles |
+| Regarder | Souris | Orientation du casque | Glisser sur la vue 3D |
+| Inspecter | Clic sur le produit | Rayon du contrôleur + gâchette | Tap sur le produit |
+| Entrer dans une galerie | Barre des six univers | Déplacement libre | Barre des six univers |
+| Chercher | `/` puis texte | Catalogue sur écran | Champ de recherche |
+| Quitter un dialogue | Échap ou × | Interagir avec l'UI desktop | × ou arrière-plan |
+
+L'utilisation du casque suppose un navigateur compatible WebXR et une origine HTTPS (ou localhost). Le support réel des contrôleurs dépend du matériel et du navigateur ; il n'a pas été validé sur chaque casque.
+
+## Structure
+
+```text
+NOVA-VR-SHOP/
+├── index.html               Interface et modales
+├── favicon.svg              Identité NOVA
+├── styles/main.css          Design responsive
+├── src/catalog.mjs          Catalogue 30 références, partagé front/serveur
+├── src/core.mjs             Prix, panier, recherche et validation
+├── src/recommender.mjs      Recommandations privées locales
+├── src/scene.mjs            Showroom A-Frame procédural/WebXR
+├── src/app.mjs              Interface, panier, modales, historique, checkout
+├── server.mjs               Serveur statique local (Node natif)
+├── worker/index.mjs         API Cloudflare : Stripe + D1 + Shippo
+├── worker/schema.sql        Schéma SQL des commandes / webhooks
+├── wrangler.toml.example    Exemple de configuration Cloudflare
+├── tests/                   Tests Node.js
+├── .github/workflows/ci.yml CI GitHub Actions
+├── DEPLOYMENT.md            Mise en production pas à pas
+└── SECURITY.md              Modèle de sécurité et limites
+```
+
+## Backend de vente réelle
+
+L'API inclut les opérations suivantes, dont l'activation nécessite les comptes et secrets du marchand :
+
+| Méthode | Route | Fonction |
+|---|---|---|
+| `GET` | `/api/status` | Indique si les ventes sont autorisées |
+| `POST` | `/api/recommend` | Propose 3 références (local ou OpenAI en option) |
+| `POST` | `/api/checkout` | Valide le client et le panier, recalcule les prix depuis le catalogue, crée la session Stripe |
+| `POST` | `/api/webhooks/stripe` | Vérifie la signature Stripe avant de marquer la commande payée |
+| `GET` | `/api/orders/:id` | Consulte le suivi via un jeton secret de commande |
+| `GET` | `/api/admin/orders` | Liste les commandes (authentification administrateur) |
+| `POST` | `/api/admin/orders/:id/ship` | Achète une étiquette Shippo, avec configuration du transporteur |
+| `POST` | `/api/admin/orders/:id/fulfill` | Enregistre un numéro de suivi obtenu par un autre transporteur |
+
+Les routes admin requièrent le jeton d'administration. Le navigateur ne reçoit jamais les clés Stripe, Shippo ou administrateur. La livraison est proposée à **6,90 €** en deçà de 100 € ; prix et devise EUR sont recalculés par le backend. Aucune expédition physique n'est effectuée automatiquement par le simple fait de payer ou de générer une étiquette.
+
+Pour activer tout cela, suivez **[DEPLOYMENT.md](DEPLOYMENT.md)**. Le mode réel utilise une base D1 Cloudflare (persistante), Stripe et éventuellement Shippo ; ces comptes ne sont pas fournis par ce dépôt.
+
+## Développement et tests
+
 ```bash
-python -m SimpleHTTPServer 8080
-```
-→ Puis ouvrez `http://localhost:8080`
-
-**Option D - Avec PHP**:
-```bash
-php -S localhost:8080
-```
-→ Puis ouvrez `http://localhost:8080`
-
-**Option E - Sans serveur**:
-Double-cliquez sur `index.html` (peut avoir des limitations CORS)
-
-### 📖 Guide Détaillé
-
-Pour un guide d'installation détaillé avec dépannage, voir **[INSTALLATION.md](INSTALLATION.md)**
-
-## 🎯 Utilisation
-
-### Navigation
-- **Souris**: Cliquez et déplacez pour regarder autour de vous
-- **Clavier**: WASD ou touches fléchées pour vous déplacer
-- **VR**: Utilisez les contrôleurs de votre casque pour naviguer
-
-### Shopping
-1. **Explorer**: Déplacez-vous dans le magasin pour découvrir les produits
-2. **Rechercher**: Utilisez la barre de recherche pour trouver rapidement un produit
-3. **Filtrer**: Sélectionnez une catégorie dans le menu déroulant pour filtrer les produits
-4. **Sélectionner**: Regardez un produit et cliquez dessus pour l'ajouter au panier
-5. **Gérer le panier**: Utilisez le panneau à droite pour modifier les quantités
-6. **Voir l'historique**: Cliquez sur "📋 Mes commandes" pour voir vos commandes précédentes
-7. **Commander**: Cliquez sur "Commander" et remplissez le formulaire de livraison
-8. **Confirmer**: Votre commande est validée et sera livrée dans le monde réel!
-
-### Fonctionnalités Avancées
-- **Recherche en temps réel**: Tapez dans la barre de recherche pour filtrer instantanément
-- **Filtres combinés**: Combinez recherche et filtre de catégorie
-- **Badge livraison gratuite**: Apparaît automatiquement quand le total dépasse 100€
-- **Validation intelligente**: Messages d'erreur clairs si les informations sont incorrectes
-
-### Mode Développeur / Debug
-Active des outils de débogage professionnels pour le développement:
-- **Activation**: 
-  - URL: `?debug=true` (ex: `http://localhost:8080?debug=true`)
-  - Clavier: `Ctrl + Shift + D`
-- **Fonctionnalités**:
-  - Compteur FPS en temps réel
-  - Métriques de performance (frame time, update time, render time)
-  - Commandes console (tapez `debug.help()` dans la console)
-  - Monitoring des événements
-  - Inspection de l'état du jeu
-
-**Commandes console disponibles:**
-```javascript
-debug.fps()      // Afficher/masquer FPS
-debug.perf()     // Afficher/masquer panel performance
-debug.state()    // Voir l'état actuel du jeu
-debug.cart()     // Voir le contenu du panier
-debug.events()   // Lister les événements
-debug.pause()    // Mettre en pause
-debug.resume()   // Reprendre
+npm test
+npm run check
 ```
 
-## 📦 Structure du Projet
+Ces tests couvrent catalogue, recherche, livraison, protection du panier, validation française, signature HMAC Stripe, CORS, checkout et suivi privé. Un vrai parcours paiement ou livraison n'est testable qu'avec des comptes de test Stripe/Shippo et un Worker D1 déployé.
 
-```
-VR-SHOPING-GAME/
-├── index.html              # Page principale VR
-├── package.json            # Configuration npm
-├── API.md                  # Documentation API
-├── README.md               # Ce fichier
-├── SECURITY.md             # Guide de sécurité
-├── GAME-DEVELOPMENT-PATTERNS.md  # Patterns de développement jeu
-├── css/
-│   └── style.css          # Styles de l'interface
-├── js/
-│   ├── config.js          # Configuration centralisée
-│   ├── utils.js           # Fonctions utilitaires
-│   ├── event-system.js    # Système d'événements (pub/sub)
-│   ├── game-state.js      # Machine à états du jeu
-│   ├── game-loop.js       # Boucle de jeu (requestAnimationFrame)
-│   ├── input-manager.js   # Gestion centralisée des inputs
-│   ├── debug-tools.js     # Outils de débogage
-│   ├── game-integration.js # Intégration des systèmes de jeu
-│   ├── vr-store.js        # Logique principale du magasin
-│   ├── cart-system.js     # Système de panier
-│   ├── product-interactions.js  # Interactions produits
-│   ├── collision-system.js      # Système de collision
-│   ├── proximity-purchase.js    # Achat de proximité
-│   ├── search-filter.js         # Recherche et filtres
-│   ├── order-history.js         # Historique des commandes
-│   └── delivery-api.js    # Intégration livraison
-└── assets/
-    ├── textures/          # Textures pour l'environnement VR
-    └── models/            # Modèles 3D (optionnel)
-```
+## Étapes avant ouverture publique
 
-## 🛠️ Technologies Utilisées
+1. Remplacer les articles de démonstration par de **vrais SKU**, stocks, poids, taxes, tarifs et visuels dont vous détenez les droits.
+2. Vérifier la capacité à préparer et expédier les produits. Configurer Stripe, votre hébergeur API, votre transporteur, l'adresse d'expédition et les secrets.
+3. Ajouter mentions légales, conditions générales de vente, politique de confidentialité, informations sur les retours et le droit de rétractation, gestion des données personnelles et obligations de facturation/TVA.
+4. Tester le cycle de paiement (succès, échec, annulation, retard asynchrone, remboursement) ainsi que la création d'étiquettes et la remise effective des colis.
+5. Mettre en place supervision, alertes, limitations de débit, inventaire réel et politique de rétention des données personnelles avant d'autoriser `LIVE_COMMERCE_ENABLED=true` et `STOCK_READY=true`.
 
-- **A-Frame 1.4.2**: Framework VR pour le web
-- **A-Frame Extras**: Composants additionnels pour A-Frame
-- **WebXR**: API pour la réalité virtuelle web
-- **LocalStorage**: Persistance des données (panier, commandes)
-- **JavaScript ES6+**: Logique applicative moderne avec modules
-- **CSS3**: Interface utilisateur responsive et accessible
-- **JSDoc**: Documentation du code
+## Zéro coût supplémentaire
 
-### Patterns de Développement Jeu
-- **State Machine**: Gestion du cycle de vie du jeu
-- **Game Loop**: Boucle avec requestAnimationFrame et delta time
-- **Event System**: Architecture événementielle (pub/sub)
-- **Input Manager**: Gestion centralisée des entrées
-- **Debug Tools**: Outils de débogage professionnels
+La configuration fournie est entièrement **mode découverte** : aucune dépense ou abonnement n’est déclenché. Consultez [docs/ZERO-COST.md](docs/ZERO-COST.md) pour les limites des services gratuits et la marche à suivre pour éviter toute facturation.
 
-Voir [GAME-DEVELOPMENT-PATTERNS.md](GAME-DEVELOPMENT-PATTERNS.md) pour plus de détails.
+## Origine et licence
 
-## 🔒 Sécurité
+Refonte indépendante conçue pour enrichir [VR-SHOPING-GAME](https://github.com/ADLIB-Mrani/VR-SHOPING-GAME), créé par ADLIB-Mrani. Code sous licence MIT (voir `LICENSE`). Les exemples de produits sont fictifs et ne constituent pas une offre de vente.
 
-Le projet implémente plusieurs couches de sécurité:
+## NOVA Concierge et OpenAI (optionnel)
 
-- **Validation des entrées**: Tous les formulaires sont validés côté client
-- **Sanitisation HTML**: Protection contre les attaques XSS
-- **Validation française**: Codes postaux (5 chiffres) et numéros de téléphone
-- **Headers de sécurité**: Recommandations CSP et autres headers (voir [SECURITY.md](SECURITY.md))
-- **Gestion des erreurs**: Messages d'erreur clairs et informatifs
-- **Expiration du panier**: Les données expirent après 7 jours
-
-Pour plus de détails sur la sécurité, consultez [SECURITY.md](SECURITY.md).
-
-## 🔌 Intégration API
-
-Le système peut s'intégrer avec des services de livraison réels. Consultez [API.md](API.md) pour la documentation complète.
-
-### Exemple d'intégration:
-```javascript
-const deliveryAPI = new DeliveryAPI('YOUR_API_KEY');
-
-// Créer une commande
-const order = await deliveryAPI.createOrder(orderData);
-
-// Suivre une commande
-const tracking = await deliveryAPI.trackOrder(orderId);
-```
-
-## 🎨 Personnalisation
-
-### Ajouter des Produits
-Éditez `js/product-interactions.js` et ajoutez à `PRODUCT_CATALOG`:
-
-```javascript
-newproduct: {
-    id: 'newproduct',
-    name: 'Nouveau Produit',
-    price: 99,
-    category: 'electronics',
-    description: 'Description du produit',
-    weight: 1.0,
-    dimensions: '20x20x10 cm'
-}
-```
-
-### Modifier l'Environnement VR
-Éditez `index.html` dans la section `<a-scene>` pour:
-- Changer les couleurs
-- Ajouter des lumières
-- Modifier la disposition des produits
-- Ajouter des textures personnalisées
-
-## 🔐 Sécurité et Confidentialité
-
-- **Validation avancée**: Validation des codes postaux français (5 chiffres) et numéros de téléphone
-- **Protection XSS**: Sanitisation de toutes les entrées utilisateur
-- **Données locales**: Stockage sécurisé dans le navigateur avec expiration automatique
-- **Pas de transmission sensible**: Aucune donnée sensible transmise sans HTTPS
-- **Messages d'erreur clairs**: Validation des formulaires avec retours informatifs
-- **API sécurisée**: Authentification recommandée pour la production (voir [SECURITY.md](SECURITY.md))
-
-## 🐛 Dépannage
-
-### Le magasin VR ne se charge pas
-- Vérifiez votre connexion Internet
-- Assurez-vous que JavaScript est activé
-- Essayez un autre navigateur
-
-### Les produits ne sont pas cliquables
-- Vérifiez que le curseur VR est actif
-- Essayez de vous rapprocher des produits
-- Rechargez la page
-
-### Le panier ne se met pas à jour
-- Vérifiez que LocalStorage est activé dans votre navigateur
-- Videz le cache du navigateur si nécessaire
-- Vérifiez la console pour les erreurs JavaScript
-- Le panier expire automatiquement après 7 jours
-
-### La recherche ne fonctionne pas
-- Assurez-vous que JavaScript est activé
-- Vérifiez que le scène VR est complètement chargée
-- Rechargez la page si nécessaire
-
-### Problèmes de validation du formulaire
-- Les codes postaux doivent être au format français (5 chiffres)
-- Les numéros de téléphone doivent être valides (format français)
-- Tous les champs sont requis et ont des longueurs minimales/maximales
-
-## 🤝 Contribution
-
-Les contributions sont les bienvenues! Pour contribuer:
-
-1. Forkez le projet
-2. Créez une branche (`git checkout -b feature/AmazingFeature`)
-3. Committez vos changements (`git commit -m 'Add AmazingFeature'`)
-4. Poussez vers la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrez une Pull Request
-
-## 📝 License
-
-Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
-
-## 👥 Auteurs
-
-- **ADLIB-Mrani** - *Créateur initial*
-
-## 🙏 Remerciements
-
-- A-Frame pour le framework VR
-- La communauté WebXR
-- Tous les contributeurs
-
-## 📧 Contact
-
-Pour toute question ou suggestion:
-- GitHub Issues: https://github.com/ADLIB-Mrani/VR-SHOPING-GAME/issues
-- Email: support@vr-store.com
-
-## 🔮 Roadmap
-
-### Fonctionnalités Implémentées ✅
-- [x] 20+ produits dans 6 catégories
-- [x] Recherche de produits en temps réel
-- [x] Filtres par catégorie
-- [x] Historique des commandes complet
-- [x] Validation avancée des formulaires
-- [x] Protection XSS et sécurité renforcée
-- [x] Livraison gratuite à partir de 100€
-- [x] Interface accessible et responsive
-- [x] Système de collision et physique
-- [x] Achat par proximité (style Call of Duty)
-- [x] Glisser-déposer vers le panier
-
-### Prochaines Améliorations 🚀
-- [ ] Intégration de modèles 3D réalistes pour les produits
-- [ ] Système de paiement en ligne sécurisé
-- [ ] Mode multijoueur (shopping avec des amis)
-- [ ] Support de plus de langues (anglais, espagnol)
-- [ ] Mode démo guidé pour nouveaux utilisateurs
-- [ ] Intégration avec services de livraison réels via API
-- [ ] Application mobile VR native
-- [ ] Système de recommandations de produits
-- [ ] Avis et notes des produits
-- [ ] Programme de fidélité
-
----
-
-**Fait avec ❤️ pour la communauté VR**
+Le champ **NOVA Concierge** propose trois références à partir de votre demande. Sans API ni clé, il utilise une recommandation locale par mots-clés, sans transmettre la demande. Pour une recommandation générative, configurez le Worker avec `AI_ASSISTANT_ENABLED = "true"` et ajoutez `OPENAI_API_KEY` via `npx wrangler secret put OPENAI_API_KEY`. Le modèle serveur par défaut est `gpt-4.1-mini` (personnalisable par `OPENAI_MODEL`) : vérifiez sa disponibilité et ses tarifs actuels avant de l'activer. Des appels OpenAI payants seront alors effectués et la question du visiteur sera envoyée au fournisseur ; informez vos utilisateurs et évitez les données personnelles. Le système vérifie les références retournées et revient aux recommandations locales en cas d'erreur.
