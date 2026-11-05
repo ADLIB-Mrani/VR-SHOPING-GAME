@@ -1,421 +1,59 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="VR Shopping Game - Magasin en réalité virtuelle avec livraison réelle">
-    <meta name="keywords" content="VR, shopping, réalité virtuelle, e-commerce, A-Frame">
-    <meta name="author" content="ADLIB-Mrani">
-    <title>VR Shopping Game - Magasin en Réalité Virtuelle</title>
-    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.0.0/dist/aframe-extras.min.js"></script>
-    <!-- Core game systems -->
-    <script src="js/config.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/event-system.js"></script>
-    <script src="js/game-state.js"></script>
-    <script src="js/game-loop.js"></script>
-    <script src="js/input-manager.js"></script>
-    <script src="js/debug-tools.js"></script>
-    <!-- VR Store systems -->
-    <script src="js/collision-system.js"></script>
-    <script src="js/vr-store.js"></script>
-    <script src="js/cart-system.js"></script>
-    <script src="js/product-interactions.js"></script>
-    <script src="js/proximity-purchase.js"></script>
-    <script src="js/search-filter.js"></script>
-    <script src="js/order-history.js"></script>
-    <!-- Game systems integration -->
-    <script src="js/game-integration.js"></script>
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0a121b">
+  <meta name="description" content="NOVA — vivez le shopping autrement dans un showroom 3D et en réalité virtuelle. 30 objets, 6 univers et un panier intelligent.">
+  <meta name="api-base" content="">
+  <title>NOVA — The immersive store</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css">
+  <script src="https://aframe.io/releases/1.7.1/aframe.min.js" defer></script>
+  <script type="module" src="src/app.mjs"></script>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div id="loading-screen">
-        <div class="loader">
-            <div class="spinner"></div>
-            <p>Chargement du magasin VR...</p>
-            <small>Cela peut prendre quelques secondes</small>
-            <div id="loading-error" style="display:none; margin-top:20px; color:#ff6b6b;">
-                <p>⚠️ Erreur de chargement</p>
-                <small>Vérifiez votre connexion Internet et rechargez la page</small>
-            </div>
+  <a class="skip-link" href="#catalog-title">Aller au catalogue</a>
+  <div id="app">
+    <header class="topbar">
+      <a class="brand" href="#home" aria-label="NOVA, accueil"><span class="brand-mark">N<span class="brand-star">✦</span></span><span class="brand-word">NOVA<span class="brand-dot">.</span></span></a>
+      <div class="top-nav" aria-label="Navigation principale"><span class="nav-active">LE SHOWROOM <span class="nav-line"></span></span><button class="nav-link" id="nav-catalog" type="button">LE CATALOGUE</button><button class="nav-link" id="nav-orders" type="button">MES COMMANDES</button></div>
+      <div class="top-actions"><span class="status" id="commerce-status"><i></i> MODE DÉCOUVERTE</span><button class="top-icon" id="sound-toggle" type="button" aria-label="Activer les sons" aria-pressed="false">♫</button><button class="cart-button" id="cart-open" type="button" aria-label="Ouvrir le panier"><span class="cart-icon">◨</span> PANIER <span id="cart-count">0</span></button></div>
+    </header>
+    <main id="home">
+      <section class="showroom" id="showroom" aria-label="Magasin 3D interactif">
+        <div id="scene-container" aria-label="Environnement 3D"><div class="scene-fallback" id="scene-fallback"><div class="fallback-orb"></div><p>Chargement de votre univers 3D…</p><small>Le catalogue reste accessible même sans WebGL</small></div></div>
+        <div class="atmosphere"></div>
+        <div class="hero-content">
+          <span class="eyebrow"><span class="eyebrow-line"></span> BIENVENUE DANS UNE NOUVELLE DIMENSION</span>
+          <h1>Shopping.<br><em>Reimagined<span>.</span></em></h1>
+          <p>Un espace à explorer. Des objets à découvrir. Une toute nouvelle façon de faire du shopping, entre réalité et imagination.</p>
+          <div class="hero-buttons"><button class="btn-primary" id="explore-btn" type="button">EXPLORER LE MAGASIN <span>↗</span></button><button class="btn-ghost" id="hero-catalog" type="button">VOIR LA COLLECTION <span>→</span></button></div>
+          <div class="hero-stats"><div><strong>30<span>+</span></strong><span>OBJETS À DÉCOUVRIR</span></div><div class="stats-divider"></div><div><strong>06</strong><span>UNIVERS IMMERSIFS</span></div><div class="stats-divider"></div><div><strong>360<span>°</span></strong><span>EXPÉRIENCE VR</span></div></div>
         </div>
-    </div>
-
-    <!-- Help Button -->
-    <button id="help-btn" class="floating-btn" title="Aide">
-        <span>?</span>
-    </button>
-
-    <!-- Help Panel -->
-    <div id="help-panel" style="display:none;">
-        <h2>🎮 Aide - Contrôles</h2>
-        <div class="help-section">
-            <h3>🖱️ Souris & Clavier</h3>
-            <ul>
-                <li><strong>WASD</strong> ou <strong>Flèches</strong> - Se déplacer</li>
-                <li><strong>Souris</strong> - Regarder autour</li>
-                <li><strong>Clic</strong> - Sélectionner un produit</li>
-            </ul>
-        </div>
-        <div class="help-section">
-            <h3>🎮 VR</h3>
-            <ul>
-                <li><strong>Joystick</strong> - Se déplacer</li>
-                <li><strong>Tête</strong> - Regarder</li>
-                <li><strong>Gâchette</strong> - Sélectionner</li>
-            </ul>
-        </div>
-        <div class="help-section">
-            <h3>🛒 Shopping</h3>
-            <ul>
-                <li>Approchez-vous des produits</li>
-                <li>Cliquez pour ajouter au panier</li>
-                <li>Gérez votre panier à droite</li>
-                <li>Cliquez "Commander" pour passer commande</li>
-            </ul>
-        </div>
-        <button onclick="closeHelp()" class="close-help-btn">Fermer</button>
-    </div>
-
-    <div id="ui-overlay">
-        <div id="cart-panel">
-            <h2>🛒 Panier</h2>
-            <div id="cart-items"></div>
-            <div id="cart-total">Total: 0€</div>
-            <button id="checkout-btn" onclick="checkout()">Commander</button>
-        </div>
-        <div id="order-form" style="display:none;">
-            <h2>Informations de livraison</h2>
-            <form id="delivery-form">
-                <input type="text" id="customer-name" placeholder="Nom complet" required>
-                <input type="text" id="customer-address" placeholder="Adresse" required>
-                <input type="text" id="customer-city" placeholder="Ville" required>
-                <input type="text" id="customer-postal" placeholder="Code postal" required>
-                <input type="tel" id="customer-phone" placeholder="Téléphone" required>
-                <button type="submit">Confirmer la commande</button>
-                <button type="button" onclick="closeOrderForm()">Annuler</button>
-            </form>
-        </div>
-        <div id="confirmation" style="display:none;">
-            <h2>Commande confirmée!</h2>
-            <p>Votre commande sera livrée dans le monde réel!</p>
-            <p id="order-details"></p>
-            <button onclick="closeConfirmation()">Continuer le shopping</button>
-        </div>
-    </div>
-
-    <a-scene id="vr-scene" loading-screen="dotsColor: #4CC3D9; backgroundColor: #1a1a1a">
-        <!-- Asset Management -->
-        <a-assets>
-            <!-- Textures can be added here for enhanced visuals -->
-            <!-- <img id="floor-texture" src="assets/textures/floor.jpg" crossorigin="anonymous"> -->
-            <!-- <img id="wall-texture" src="assets/textures/wall.jpg" crossorigin="anonymous"> -->
-        </a-assets>
-
-        <!-- Store Environment -->
-        <a-entity id="store-environment">
-            <!-- Floor -->
-            <a-plane position="0 0 0" rotation="-90 0 0" width="20" height="20" 
-                     color="#8B7D6B" shadow="receive: true" wall-collision
-                     material="color: #8B7D6B; repeat: 10 10; roughness: 0.8"></a-plane>
-            
-            <!-- Walls -->
-            <a-box position="0 2 -10" width="20" height="4" depth="0.2" color="#E8E0D5" wall-collision solid
-                   material="color: #E8E0D5; roughness: 0.5"></a-box>
-            <a-box position="-10 2 0" width="0.2" height="4" depth="20" color="#E8E0D5" wall-collision solid
-                   material="color: #E8E0D5; roughness: 0.5"></a-box>
-            <a-box position="10 2 0" width="0.2" height="4" depth="20" color="#E8E0D5" wall-collision solid
-                   material="color: #E8E0D5; roughness: 0.5"></a-box>
-            <a-box position="0 2 10" width="20" height="4" depth="0.2" color="#E8E0D5" wall-collision solid
-                   material="color: #E8E0D5; roughness: 0.5"></a-box>
-            
-            <!-- Ceiling -->
-            <a-plane position="0 4 0" rotation="90 0 0" width="20" height="20" color="#F5F5F5" 
-                     material="color: #F5F5F5; metalness: 0.2"></a-plane>
-            
-            <!-- Lighting -->
-            <a-light type="ambient" intensity="0.5"></a-light>
-            <a-light type="directional" position="2 4 2" intensity="0.8" castShadow="true"></a-light>
-            <a-light type="point" position="-5 3 -5" intensity="0.5"></a-light>
-            <a-light type="point" position="5 3 5" intensity="0.5"></a-light>
-        </a-entity>
-
-        <!-- Product Displays -->
-        <a-entity id="products">
-            <!-- Electronics Section -->
-            <a-entity position="-7 0 -7">
-                <a-text value="Électronique" position="0 2.5 0" align="center" color="#333" width="6"></a-text>
-                
-                <!-- Display Table -->
-                <a-box position="0 0.8 0" width="4" height="0.1" depth="2" color="#8B7355" product-collision solid
-                       material="color: #8B7355; metalness: 0.3; roughness: 0.7"></a-box>
-                
-                <!-- Laptop -->
-                <a-entity class="product" data-id="laptop" data-name="Ordinateur Portable" data-price="999" position="-1 1.2 0" product-collision solid>
-                    <a-box color="#2C3E50" depth="0.8" height="0.05" width="1.2" 
-                           material="color: #2C3E50; metalness: 0.8; roughness: 0.2"></a-box>
-                    <a-box color="#34495E" depth="0.02" height="0.9" width="1.2" position="0 0.5 -0.4"
-                           material="color: #34495E; metalness: 0.5; roughness: 0.3"></a-box>
-                    <a-text value="Laptop\n999€" position="0 -0.3 0" align="center" width="3" color="#000"></a-text>
-                </a-entity>
-                
-                <!-- Smartphone -->
-                <a-entity class="product" data-id="phone" data-name="Smartphone" data-price="699" position="1 1.2 0" product-collision solid>
-                    <a-box color="#1A1A1A" depth="0.1" height="1.5" width="0.7"
-                           material="color: #1A1A1A; metalness: 0.7; roughness: 0.2"></a-box>
-                    <a-plane color="#4A90E2" depth="0.01" height="1.3" width="0.6" position="0 0 0.051"
-                             material="color: #4A90E2; emissive: #2E5C8A; emissiveIntensity: 0.3"></a-plane>
-                    <a-text value="Phone\n699€" position="0 -0.5 0" align="center" width="3" color="#000"></a-text>
-                </a-entity>
-            </a-entity>
-
-            <!-- Clothing Section -->
-            <a-entity position="7 0 -7">
-                <a-text value="Vêtements" position="0 2.5 0" align="center" color="#333" width="6"></a-text>
-                
-                <!-- Display Table -->
-                <a-box position="0 0.8 0" width="4" height="0.1" depth="2" color="#8B7355" product-collision solid
-                       material="color: #8B7355; metalness: 0.3; roughness: 0.7"></a-box>
-                
-                <!-- T-Shirt -->
-                <a-entity class="product" data-id="tshirt" data-name="T-Shirt" data-price="29" position="-1 1.5 0" product-collision solid>
-                    <a-cylinder color="#E74C3C" height="1" radius="0.5"
-                                material="color: #E74C3C; roughness: 0.8"></a-cylinder>
-                    <a-text value="T-Shirt\n29€" position="0 -0.8 0" align="center" width="3" color="#000"></a-text>
-                </a-entity>
-                
-                <!-- Jeans -->
-                <a-entity class="product" data-id="jeans" data-name="Jean" data-price="79" position="1 1.5 0" product-collision solid>
-                    <a-cylinder color="#3498DB" height="1.2" radius="0.4"
-                                material="color: #3498DB; roughness: 0.9"></a-cylinder>
-                    <a-text value="Jeans\n79€" position="0 -0.8 0" align="center" width="3" color="#000"></a-text>
-                </a-entity>
-                
-                <!-- Shoes -->
-                <a-entity class="product" data-id="shoes" data-name="Chaussures de Sport" data-price="120" position="-1 1.2 -1.5" product-collision solid>
-                    <a-box color="#2C3E50" depth="0.8" height="0.3" width="0.4"
-                           material="color: #2C3E50; metalness: 0.2; roughness: 0.7"></a-box>
-                    <a-box color="#E74C3C" depth="0.8" height="0.2" width="0.4" position="0 0.25 0"
-                           material="color: #E74C3C; roughness: 0.6"></a-box>
-                    <a-text value="Shoes\n120€" position="0 -0.5 0" align="center" width="3" color="#000"></a-text>
-                </a-entity>
-                
-                <!-- Jacket -->
-                <a-entity class="product" data-id="jacket" data-name="Veste en Cuir" data-price="199" position="1 1.5 -1.5" product-collision solid>
-                    <a-cylinder color="#1A1A1A" height="1.3" radius="0.5"
-                                material="color: #1A1A1A; metalness: 0.4; roughness: 0.3"></a-cylinder>
-                    <a-text value="Jacket\n199€" position="0 -0.8 0" align="center" width="3" color="#000"></a-text>
-                </a-entity>
-            </a-entity>
-
-            <!-- Home Decor Section -->
-            <a-entity position="-7 0 7">
-                <a-text value="Décoration" position="0 2.5 0" align="center" color="#333" width="6"></a-text>
-                
-                <!-- Display Table -->
-                <a-box position="0 0.8 0" width="4" height="0.1" depth="2" color="#8B7355" product-collision solid
-                       material="color: #8B7355; metalness: 0.3; roughness: 0.7"></a-box>
-                
-                <!-- Lamp -->
-                <a-entity class="product" data-id="lamp" data-name="Lampe Design" data-price="149" position="-1 1 0" product-collision solid>
-                    <a-cylinder color="#F39C12" height="1.5" radius="0.15" position="0 0.75 0"
-                                material="color: #F39C12; metalness: 0.6; roughness: 0.3"></a-cylinder>
-                    <a-cone color="#ECF0F1" height="0.8" radius-bottom="0.5" radius-top="0.2" position="0 1.9 0"
-                            material="color: #ECF0F1; emissive: #FFF; emissiveIntensity: 0.2"></a-cone>
-                    <a-text value="Lampe\n149€" position="0 -0.3 0" align="center" width="3" color="#000"></a-text>
-                </a-entity>
-                
-                <!-- Vase -->
-                <a-entity class="product" data-id="vase" data-name="Vase Céramique" data-price="59" position="1 1 0" product-collision solid>
-                    <a-cylinder color="#16A085" height="1" radius-bottom="0.3" radius-top="0.4"
-                                material="color: #16A085; roughness: 0.4; metalness: 0.2"></a-cylinder>
-                    <a-text value="Vase\n59€" position="0 -0.3 0" align="center" width="3" color="#000"></a-text>
-                </a-entity>
-                
-                <!-- Picture Frame -->
-                <a-entity class="product" data-id="frame" data-name="Cadre Photo" data-price="35" position="-1 1.5 -1.5" product-collision solid>
-                    <a-box color="#654321" depth="0.1" height="1" width="0.8"
-                           material="color: #654321; roughness: 0.8"></a-box>
-                    <a-plane color="#E8E8E8" depth="0.05" height="0.8" width="0.6" position="0 0 0.055"
-                             material="color: #E8E8E8"></a-plane>
-                    <a-text value="Cadre\n35€" position="0 -0.6 0" align="center" width="3" color="#000"></a-text>
-                </a-entity>
-                
-                <!-- Clock -->
-                <a-entity class="product" data-id="clock" data-name="Horloge Murale" data-price="89" position="1 1.5 -1.5" product-collision solid>
-                    <a-cylinder color="#2C3E50" height="0.2" radius="0.5"
-                                material="color: #2C3E50; metalness: 0.7; roughness: 0.2"></a-cylinder>
-                    <a-plane color="#ECF0F1" height="0.9" width="0.9" position="0 0 0.11" rotation="0 0 0"
-                             material="color: #ECF0F1"></a-plane>
-                    <a-text value="Horloge\n89€" position="0 -0.6 0" align="center" width="3" color="#000"></a-text>
-                </a-entity>
-            </a-entity>
-
-            <!-- Food Section -->
-            <a-entity position="7 0 7">
-                <a-text value="Alimentation" position="0 2.5 0" align="center" color="#333" width="6"></a-text>
-                
-                <!-- Display Table -->
-                <a-box position="0 0.8 0" width="4" height="0.1" depth="2" color="#8B7355" product-collision solid
-                       material="color: #8B7355; metalness: 0.3; roughness: 0.7"></a-box>
-                
-                <!-- Coffee -->
-                <a-entity class="product" data-id="coffee" data-name="Café Premium" data-price="12" position="-1 1 0" product-collision solid>
-                    <a-cylinder color="#6F4E37" height="1" radius="0.3"
-                                material="color: #6F4E37; roughness: 0.9"></a-cylinder>
-                    <a-text value="Café\n12€" position="0 -0.3 0" align="center" width="3" color="#000"></a-text>
-                </a-entity>
-                
-                <!-- Chocolate -->
-                <a-entity class="product" data-id="chocolate" data-name="Chocolat Artisanal" data-price="8" position="1 1 0" product-collision solid>
-                    <a-box color="#3E2723" depth="0.5" height="0.3" width="1"
-                           material="color: #3E2723; roughness: 0.6"></a-box>
-                    <a-text value="Chocolat\n8€" position="0 -0.3 0" align="center" width="3" color="#000"></a-text>
-                </a-entity>
-                
-                <!-- Wine Bottle -->
-                <a-entity class="product" data-id="wine" data-name="Vin Rouge" data-price="45" position="-1 1.3 -1.5" product-collision solid>
-                    <a-cylinder color="#722F37" height="1.5" radius="0.15"
-                                material="color: #722F37; metalness: 0.3; roughness: 0.2"></a-cylinder>
-                    <a-cone color="#1A1A1A" height="0.3" radius-bottom="0.15" radius-top="0.05" position="0 0.9 0"
-                            material="color: #1A1A1A"></a-cone>
-                    <a-text value="Vin\n45€" position="0 -0.8 0" align="center" width="3" color="#000"></a-text>
-                </a-entity>
-                
-                <!-- Cheese -->
-                <a-entity class="product" data-id="cheese" data-name="Fromage Artisanal" data-price="18" position="1 1 -1.5" product-collision solid>
-                    <a-box color="#FFF8DC" depth="0.6" height="0.3" width="0.6"
-                           material="color: #FFF8DC; roughness: 0.9"></a-box>
-                    <a-text value="Fromage\n18€" position="0 -0.3 0" align="center" width="3" color="#000"></a-text>
-                </a-entity>
-            </a-entity>
-            
-            <!-- Books Section -->
-            <a-entity position="0 0 -7">
-                <a-text value="Livres" position="0 2.5 0" align="center" color="#333" width="6"></a-text>
-                
-                <!-- Bookshelf -->
-                <a-box position="0 1.5 0" width="3" height="2.5" depth="0.4" color="#654321" product-collision solid
-                       material="color: #654321; roughness: 0.8"></a-box>
-                
-                <!-- Book 1 -->
-                <a-entity class="product" data-id="book1" data-name="Roman Bestseller" data-price="22" position="-0.8 1.8 0.3" product-collision solid>
-                    <a-box color="#C0392B" depth="0.15" height="1" width="0.7"
-                           material="color: #C0392B; roughness: 0.7"></a-box>
-                    <a-text value="Roman\n22€" position="0 -0.6 0" align="center" width="3" color="#000"></a-text>
-                </a-entity>
-                
-                <!-- Book 2 -->
-                <a-entity class="product" data-id="book2" data-name="Guide Cuisine" data-price="28" position="0 1.8 0.3" product-collision solid>
-                    <a-box color="#16A085" depth="0.15" height="1" width="0.7"
-                           material="color: #16A085; roughness: 0.7"></a-box>
-                    <a-text value="Cuisine\n28€" position="0 -0.6 0" align="center" width="3" color="#000"></a-text>
-                </a-entity>
-                
-                <!-- Book 3 -->
-                <a-entity class="product" data-id="book3" data-name="Encyclopédie" data-price="35" position="0.8 1.8 0.3" product-collision solid>
-                    <a-box color="#2C3E50" depth="0.15" height="1" width="0.7"
-                           material="color: #2C3E50; roughness: 0.7"></a-box>
-                    <a-text value="Encyclopedia\n35€" position="0 -0.6 0" align="center" width="3" color="#000"></a-text>
-                </a-entity>
-            </a-entity>
-            
-            <!-- Sports Section -->
-            <a-entity position="0 0 7">
-                <a-text value="Sport" position="0 2.5 0" align="center" color="#333" width="6"></a-text>
-                
-                <!-- Display Table -->
-                <a-box position="0 0.8 0" width="4" height="0.1" depth="2" color="#8B7355" product-collision solid
-                       material="color: #8B7355; metalness: 0.3; roughness: 0.7"></a-box>
-                
-                <!-- Basketball -->
-                <a-entity class="product" data-id="basketball" data-name="Ballon de Basket" data-price="35" position="-1 1.5 0" product-collision solid>
-                    <a-sphere color="#FF6600" radius="0.4"
-                              material="color: #FF6600; roughness: 0.8"></a-sphere>
-                    <a-text value="Basket\n35€" position="0 -0.6 0" align="center" width="3" color="#000"></a-text>
-                </a-entity>
-                
-                <!-- Yoga Mat -->
-                <a-entity class="product" data-id="yogamat" data-name="Tapis de Yoga" data-price="45" position="1 1 0" product-collision solid>
-                    <a-cylinder color="#9B59B6" height="0.1" radius="0.3"
-                                material="color: #9B59B6; roughness: 0.9"></a-cylinder>
-                    <a-text value="Yoga\n45€" position="0 -0.3 0" align="center" width="3" color="#000"></a-text>
-                </a-entity>
-                
-                <!-- Dumbbells -->
-                <a-entity class="product" data-id="dumbbells" data-name="Haltères 5kg" data-price="55" position="-1 1 -1.5" product-collision solid>
-                    <a-cylinder color="#34495E" height="0.8" radius="0.15" rotation="0 0 90"
-                                material="color: #34495E; metalness: 0.8; roughness: 0.2"></a-cylinder>
-                    <a-sphere color="#34495E" radius="0.2" position="-0.5 0 0"
-                              material="color: #34495E; metalness: 0.8; roughness: 0.2"></a-sphere>
-                    <a-sphere color="#34495E" radius="0.2" position="0.5 0 0"
-                              material="color: #34495E; metalness: 0.8; roughness: 0.2"></a-sphere>
-                    <a-text value="Haltères\n55€" position="0 -0.5 0" align="center" width="3" color="#000"></a-text>
-                </a-entity>
-            </a-entity>
-        </a-entity>
-
-        <!-- Info Signs -->
-        <a-entity position="0 2.5 -9">
-            <a-text value="🎮 Bienvenue dans votre magasin VR!" 
-                    align="center" width="10" color="#667eea"></a-text>
-        </a-entity>
-        
-        <a-entity position="0 1.8 -9">
-            <a-text value="WASD = Se déplacer | Souris = Regarder | Clic = Acheter" 
-                    align="center" width="8" color="#2C3E50"></a-text>
-        </a-entity>
-        
-        <a-entity position="0 1.3 -9">
-            <a-text value="💰 Livraison GRATUITE à partir de 100€!" 
-                    align="center" width="7" color="#27AE60"></a-text>
-        </a-entity>
-        
-        <!-- Directional arrows -->
-        <a-entity position="-9 1.5 0" rotation="0 90 0">
-            <a-text value="← Électronique" align="center" width="5" color="#3498DB"></a-text>
-        </a-entity>
-        
-        <a-entity position="9 1.5 0" rotation="0 -90 0">
-            <a-text value="Vêtements →" align="center" width="5" color="#E74C3C"></a-text>
-        </a-entity>
-
-        <!-- Camera/Player -->
-        <a-entity id="rig" position="0 1.6 5" movement-constraints>
-            <a-camera id="camera" look-controls wasd-controls="acceleration: 50">
-                <a-cursor color="#4CC3D9" raycaster="objects: .product, .purchase-btn, .qty-btn"></a-cursor>
-            </a-camera>
-        </a-entity>
-        
-        <!-- Shopping Cart Visual Representation -->
-        <a-entity id="cart-visual" position="9 1 9" product-collision solid>
-            <a-box position="0 0.5 0" width="1" height="0.8" depth="0.8" color="#E74C3C"
-                   material="color: #E74C3C; opacity: 0.8; metalness: 0.5"></a-box>
-            <a-text value="🛒 PANIER" position="0 1.2 0" align="center" width="4" color="#E74C3C"></a-text>
-        </a-entity>
-
-        <!-- Sky -->
-        <a-sky color="#87CEEB"></a-sky>
-    </a-scene>
-
-    <script>
-        // Check if A-Frame loaded successfully
-        setTimeout(function() {
-            if (typeof AFRAME === 'undefined') {
-                const loadingError = document.getElementById('loading-error');
-                if (loadingError) {
-                    loadingError.style.display = 'block';
-                }
-                console.error('A-Frame failed to load. Please check your internet connection.');
-            }
-        }, 5000);
-        
-        // Initialize the VR store when the scene is loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            initVRStore();
-        });
-    </script>
+        <div class="experience-card"><div class="experience-top"><span class="pulse"></span> LIVE EXPERIENCE <span class="experience-cross">✧</span></div><div class="experience-visual"><span class="orbit o1"></span><span class="orbit o2"></span><span class="orbit-core">N</span></div><strong>Votre univers.<br>Vos découvertes.</strong><span>01 / 06 — TECH & AUDIO</span></div>
+        <div class="scene-hud"><div class="hud-left"><span class="hud-indicator">✥</span><span id="scene-status">SHOWROOM INTERACTIF</span><span class="hud-separator">/</span><span id="zone-indicator">ATRIUM CENTRAL</span></div><div class="hud-right"><button type="button" id="reset-view" aria-label="Revenir à l'entrée du magasin">⌖ <span>RETOUR</span></button><button type="button" id="enter-vr">◉ <span>MODE VR</span></button><button type="button" id="fullscreen-btn" aria-label="Plein écran">⛶</button></div></div>
+        <div class="touch-pad" id="touch-pad" aria-label="Contrôles tactiles de déplacement"><button type="button" data-move="forward" aria-label="Avancer">↑</button><div><button type="button" data-move="left" aria-label="Aller à gauche">←</button><button type="button" data-move="back" aria-label="Reculer">↓</button><button type="button" data-move="right" aria-label="Aller à droite">→</button></div></div>
+        <div class="movement-tip" id="movement-tip"><span class="keycaps"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span><span>POUR EXPLORER <small>· SOURIS POUR REGARDER · CLIC POUR INSPECTER</small></span><button type="button" id="close-tip" aria-label="Masquer les commandes">×</button></div>
+      </section>
+      <section class="category-strip" aria-label="Univers"><div class="strip-label"><span>VOTRE PARCOURS</span><strong>Explorez nos univers <span>↗</span></strong></div><div id="zone-buttons" class="zones"></div></section>
+      <section class="catalog-section" id="catalog"><div class="catalog-header"><div><span class="eyebrow dark"><span class="eyebrow-line"></span> SÉLECTION NOVA / 2026</span><h2 id="catalog-title">Objets de <em>désir.</em></h2><p>Une sélection pensée pour inspirer votre quotidien.</p></div><div class="catalog-head-right"><span class="catalog-count" id="result-count">30 OBJETS</span><span class="catalog-squiggle">✳</span></div></div>
+        <div class="catalog-toolbar"><label class="search-field" for="search"><span>⌕</span><input id="search" type="search" placeholder="Rechercher votre prochaine découverte…" autocomplete="off"><kbd>/</kbd></label><div class="filter-row"><select id="filter-category" aria-label="Filtrer par univers"><option value="all">Tous les univers</option></select><select id="sort-products" aria-label="Trier les produits"><option value="featured">Notre sélection</option><option value="price-asc">Prix croissant</option><option value="price-desc">Prix décroissant</option><option value="name">Nom A–Z</option></select></div></div>
+        <div class="filter-pills" id="category-pills"></div>
+        <div class="concierge" aria-label="Assistant de sélection NOVA"><div class="concierge-heading"><span class="concierge-symbol">✳</span><div><strong>NOVA CONCIERGE</strong><small>Un peu d’inspiration ? Décrivez ce que vous recherchez.</small></div></div><form id="concierge-form"><label class="sr-only" for="concierge-query">Votre recherche de conseils</label><input id="concierge-query" maxlength="220" placeholder="Ex. Un cadeau design à moins de 50 €…" autocomplete="off" required><button type="submit">ME CONSEILLER ↗</button></form><div id="concierge-results" class="concierge-results" hidden></div><small class="concierge-note">Suggestions locales par défaut. Si l'IA est activée, votre requête peut être transmise à OpenAI ; n'indiquez aucune information personnelle.</small></div>
+        <div class="product-grid" id="product-grid"></div><div class="no-results" id="no-results" hidden><span>✳</span><h3>Aucun objet trouvé</h3><p>Essayez une autre recherche ou un autre univers.</p><button type="button" class="btn-primary" id="reset-filters">EFFACER LES FILTRES ↗</button></div>
+      </section>
+      <footer class="footer"><div class="footer-brand">NOVA<span>.</span><small>THE IMMERSIVE STORE — EST. 2026</small></div><p>Imaginez plus. Explorez autrement.</p><div class="footer-links"><span>WEBXR READY</span><span>DESIGNED FOR DISCOVERY</span><a href="https://github.com/ADLIB-Mrani/VR-SHOPING-GAME" target="_blank" rel="noopener">GITHUB ↗</a></div></footer>
+    </main>
+    <div class="scrim" id="scrim" hidden></div>
+    <aside class="drawer" id="cart-drawer" role="dialog" aria-modal="true" aria-label="Votre panier" hidden><div class="drawer-header"><div><span class="eyebrow dark">VOTRE SÉLECTION</span><h2>Mon panier<span>.</span></h2></div><button class="close-button" type="button" data-close aria-label="Fermer">×</button></div><div id="cart-lines" class="cart-lines"></div><div class="drawer-bottom"><div class="shipping-progress"><div id="shipping-message"></div><div class="progress-track"><div id="shipping-bar"></div></div></div><div class="price-row"><span>Sous-total</span><strong id="cart-subtotal">0 €</strong></div><div class="price-row"><span>Livraison</span><strong id="cart-shipping">—</strong></div><div class="price-row grand-total"><span>Total</span><strong id="cart-total">0 €</strong></div><button class="checkout-button" id="checkout-start" type="button">PASSER COMMANDE <span>→</span></button><p class="drawer-disclaimer" id="checkout-disclaimer">Une commande démo ne déclenche ni paiement ni expédition.</p></div></aside>
+    <div class="modal" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="detail-title" hidden><button class="close-button modal-close" type="button" data-close aria-label="Fermer">×</button><div class="detail-art" id="detail-art"></div><div class="detail-info"><span class="eyebrow dark" id="detail-category"></span><h2 id="detail-title"></h2><span class="detail-price" id="detail-price"></span><p id="detail-description"></p><div class="detail-feature"><span>✧</span> SÉLECTION NOVA &nbsp;·&nbsp; DESIGN ICONIQUE</div><button class="checkout-button" type="button" id="detail-add">AJOUTER À MA SÉLECTION <span>＋</span></button><p class="detail-hint">Appuyez sur Échap pour revenir à votre exploration.</p></div></div>
+    <div class="modal checkout-modal" id="checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title" hidden><button class="close-button modal-close" type="button" data-close aria-label="Fermer">×</button><div class="checkout-content"><span class="eyebrow dark">DERNIÈRE ÉTAPE</span><h2 id="checkout-title">Votre commande<span>.</span></h2><p id="checkout-mode-text">Les informations de cette démo restent sur cet appareil. Aucun article réel ne sera expédié.</p><form id="checkout-form" novalidate><div class="field-grid"><label>Nom complet<input name="name" required minlength="3" maxlength="100" autocomplete="name" placeholder="Camille Dupont"></label><label>Adresse email<input name="email" required type="email" maxlength="200" autocomplete="email" placeholder="camille@exemple.fr"></label></div><label>Adresse de livraison<input name="street" required minlength="5" maxlength="180" autocomplete="street-address" placeholder="12 rue des Fleurs"></label><div class="field-grid"><label>Ville<input name="city" required minlength="2" maxlength="100" autocomplete="address-level2" placeholder="Lyon"></label><label>Code postal<input name="postal" required inputmode="numeric" pattern="[0-9]{5}" maxlength="5" autocomplete="postal-code" placeholder="69003"></label></div><label>Téléphone<input name="phone" required type="tel" autocomplete="tel" placeholder="06 12 34 56 78"></label><div class="checkout-summary"><span>Montant de la sélection</span><strong id="checkout-amount"></strong></div><p class="form-error" id="form-error" role="alert" hidden></p><button type="submit" id="checkout-submit" class="checkout-button">CRÉER UNE COMMANDE DÉMO <span>→</span></button><small id="checkout-legal">Mode démo : aucun paiement et aucune livraison. Ne renseignez pas de vraies coordonnées personnelles pour tester.</small></form></div></div>
+    <div class="modal orders-modal" id="orders-modal" role="dialog" aria-modal="true" aria-labelledby="orders-title" hidden><button class="close-button modal-close" type="button" data-close aria-label="Fermer">×</button><div class="orders-content"><span class="eyebrow dark">ARCHIVES PERSONNELLES</span><h2 id="orders-title">Mes commandes<span>.</span></h2><p>Les commandes de démonstration sont séparées des commandes payées et expédiées.</p><div id="orders-list"></div></div></div>
+    <div class="toast-area" id="toasts" role="status" aria-live="polite"></div>
+  </div>
 </body>
 </html>

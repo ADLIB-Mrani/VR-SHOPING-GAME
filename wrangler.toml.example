@@ -1,0 +1,36 @@
+name = "nova-commerce-api"
+main = "worker/index.mjs"
+compatibility_date = "2026-08-01"
+workers_dev = true
+
+# Replace with your D1 database id after creating the database.
+[[d1_databases]]
+binding = "DB"
+database_name = "nova-commerce"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+
+[vars]
+# HTTPS origin hosting the storefront (no trailing slash).
+PUBLIC_WEB_ORIGIN = "https://YOUR_USERNAME.github.io"
+# Full public storefront URL (including /repo-name on GitHub Pages).
+PUBLIC_STORE_URL = "https://YOUR_USERNAME.github.io/VR-SHOPING-GAME"
+# KEEP BOTH false until Stripe, fulfillment, stock and legal compliance are ready.
+LIVE_COMMERCE_ENABLED = "false"
+STOCK_READY = "false"
+AUTO_FULFILL = "false"
+# Optional AI-assisted product selection: keep disabled until consent, limits and a key are configured.
+AI_ASSISTANT_ENABLED = "false"
+OPENAI_MODEL = "gpt-4.1-mini"
+# Optional Shippo label sender address. A live label purchase incurs carrier charges.
+# SHIP_FROM_NAME = "..."
+# SHIP_FROM_STREET = "..."
+# SHIP_FROM_CITY = "..."
+# SHIP_FROM_ZIP = "..."
+# SHIP_FROM_COUNTRY = "FR"
+# SHIP_FROM_PHONE = "..."
+# SHIP_FROM_EMAIL = "..."
+# SHIPPO_CARRIER_ACCOUNT = "..."
+# SHIPPO_SERVICELEVEL_TOKEN = "..."
+
+# NEVER put STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, SHIPPO_TOKEN or ADMIN_API_TOKEN here.
+# Set them through `npx wrangler secret put NAME` or your Cloudflare dashboard.
